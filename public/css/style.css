@@ -1,0 +1,198 @@
+/* สไตล์พื้นฐาน */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+/* กำหนด container ให้เนื้อหาดูเป็นระเบียบ */
+.container {
+    width: 80%;
+    margin: 30px auto;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+/* สไตล์หัวข้อ */
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+/* ปุ่มเพิ่มการขาย */
+.btn {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #28a745;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.btn:hover {
+    background-color: #218838;
+}
+
+/* ตารางแสดงข้อมูล */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th,
+td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #007bff;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* กำหนดขนาด container */
+.container {
+    width: 50%;
+    margin: 30px auto;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+/* สไตล์หัวข้อ */
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+/* จัดรูปแบบกล่องป้อนข้อมูล */
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* ปุ่มกด */
+.btn {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #10b807;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* ปุ่ม Cancel */
+.btn-cancel {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #dc3545;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+.btn-cancel:hover {
+    background-color: #c82333;
+}
+
+/* ฟอร์มกรองช่วงเวลา */
+.date-filter {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.date-filter label {
+    font-weight: bold;
+}
+
+.date-filter input {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.date-filter button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.date-filter button:hover {
+    background-color: #0056b3;
+}
+
+/* กำหนดพื้นที่ว่างด้านบนสำหรับ div.form-group */
+.form-group {
+    margin-top: 20px; /* ปรับค่าตามที่ต้องการ */
+}
+
+
+input,
+button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+}
+
+.error-bar {
+    background-color: #dc3545;   /* สีแดง */
+    color: #ffffff;              /* ตัวอักษรสีขาว */
+    padding: 12px;
+    text-align: center;
+    font-weight: 500;
+}
+.description {
+    white-space: normal;        /* ให้ขึ้นบรรทัดใหม่ได้ */
+    word-wrap: break-word;      /* ตัดคำเมื่อยาวเกิน */
+    max-width: 250px;           /* กำหนดความกว้าง (ปรับได้) */
+}
+

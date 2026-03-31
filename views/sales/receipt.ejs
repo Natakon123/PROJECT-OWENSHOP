@@ -1,0 +1,105 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap" rel="stylesheet">
+
+<%- include('../navbar.ejs') %>
+
+<div class="container mt-5 mb-5">
+    <div class="receipt-card mx-auto p-5 shadow-sm" style="max-width: 700px; background: #fff; border: 1px solid #eee; font-family: 'Sarabun', sans-serif; color: #333;">
+        
+        <div class="row mb-4">
+            <div class="col-sm-7 text-left">
+                <h2 class="font-weight-bold text-primary mb-1">ITMI SHOP</h2>
+                <p class="mb-0 text-muted small">123 ถนนไอที แขวงพญาไท เขตราชเทวี กรุงเทพฯ 10400</p>
+                <p class="mb-0 text-muted small">โทร: 02-XXX-XXXX | เลขประจำตัวผู้เสียภาษี: 010XXXXXXXXXX</p>
+            </div>
+            <div class="col-sm-5 text-right">
+                <h3 class="text-uppercase text-muted font-weight-light">ใบเสร็จรับเงิน</h3>
+                <p class="mb-0"><strong>เลขที่:</strong> <%= sale._id %></p>
+                <p class="mb-0"><strong>วันที่:</strong> <%= moment(sale.date).format('DD/MM/YYYY HH:mm') %></p>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row my-4">
+            <div class="col-12 text-left">
+                <h6 class="font-weight-bold text-secondary">ข้อมูลลูกค้า:</h6>
+                <p class="mb-0"><%= sale.member ? sale.member.name : 'ลูกค้าทั่วไป (Walk-in Customer)' %></p>
+                <% if(sale.member && sale.member.address) { %>
+                    <p class="small text-muted mb-0"><%= sale.member.address %></p>
+                <% } %>
+            </div>
+        </div>
+
+        <table class="table table-borderless">
+            <thead>
+                <tr style="border-bottom: 2px solid #333;">
+                    <th class="py-3">รายละเอียดสินค้า</th>
+                    <th class="py-3 text-center">จำนวน</th>
+                    <th class="py-3 text-right">ราคาหน่วยละ</th>
+                    <th class="py-3 text-right">จำนวนเงิน</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td class="py-3"><%= sale.product.name %></td>
+                    <td class="py-3 text-center"><%= sale.quantity %></td>
+                    <td class="py-3 text-right"><%= (sale.priceAtSale).toLocaleString(undefined, {minimumFractionDigits: 2}) %></td>
+                    <td class="py-3 text-right"><%= (sale.priceAtSale * sale.quantity).toLocaleString(undefined, {minimumFractionDigits: 2}) %></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="row mt-4">
+            <div class="col-sm-7 text-left align-self-end">
+                <p class="small mb-1"><strong>วิธีการชำระเงิน:</strong> <%= sale.paymentMethod %></p>
+                <p class="small text-muted italic">* สินค้าซื้อแล้วไม่รับเปลี่ยนหรือคืน</p>
+            </div>
+            <div class="col-sm-5">
+                <div class="d-flex justify-content-between mb-2">
+                    <span>รวมเป็นเงิน:</span>
+                    <span><%= (sale.priceAtSale * sale.quantity).toLocaleString(undefined, {minimumFractionDigits: 2}) %> ฿</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2 text-danger">
+                    <span>ส่วนลด:</span>
+                    <span>-<%= sale.discount.toLocaleString(undefined, {minimumFractionDigits: 2}) %> ฿</span>
+                </div>
+                <div class="d-flex justify-content-between py-2 border-top border-bottom" style="font-size: 1.2rem; font-weight: bold;">
+                    <span class="text-primary">ยอดสุทธิ:</span>
+                    <span class="text-primary"><%= sale.totalPrice.toLocaleString(undefined, {minimumFractionDigits: 2}) %> ฿</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5 pt-4">
+            <div class="col-6 text-center">
+                <div style="border-bottom: 1px solid #ccc; width: 80%; margin: 0 auto 10px;"></div>
+                <p class="small text-muted">ผู้รับเงิน</p>
+            </div>
+            <div class="col-6 text-center">
+                <div style="border-bottom: 1px solid #ccc; width: 80%; margin: 0 auto 10px;"></div>
+                <p class="small text-muted">ผู้จ่ายเงิน / ลูกค้า</p>
+            </div>
+        </div>
+
+        <div class="no-print mt-5 text-center">
+            <button onclick="window.print()" class="btn btn-dark btn-lg px-5 mr-2">🖨️ พิมพ์ใบเสร็จ</button>
+            <a href="/sales/new" class="btn btn-outline-secondary btn-lg px-5">กลับหน้าหลัก</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    body { background-color: #f8f9fa; }
+    .receipt-card { border-radius: 8px; position: relative; }
+    
+    /* สไตล์สำหรับการพิมพ์ */
+    @media print {
+        body { background: white !important; }
+        .no-print, nav { display: none !important; }
+        .container { width: 100% !important; max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
+        .receipt-card { border: none !important; box-shadow: none !important; padding: 0 !important; }
+        .shadow-sm { box-shadow: none !important; }
+    }
+</style>

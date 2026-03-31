@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | OWENSHOP</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* สไตล์เพิ่มเติมเพื่อให้ดู Modern Tech */
+        body {
+            background-color: #f4f7f6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #1a1d20;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        .error {
+            color: #e74c3c;
+            background: #fdeaea;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: #007AFF;
+            outline: none;
+            box-shadow: 0 0 8px rgba(0, 122, 255, 0.2);
+        }
+
+        button {
+            background-color: #1a1d20;
+            color: white;
+            padding: 14px 20px;
+            margin: 20px 0;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #007AFF; /* เปลี่ยนเป็นสีฟ้าตามธีมร้านตอน Hover */
+        }
+
+        /* ส่วนที่ขอเพิ่ม: ลิงก์ไปหน้าสมัครสมาชิก */
+        .register-link {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .register-link a {
+            color: #007AFF;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <img src="/images/home/OWEN-Photoroom (1).png" alt="OWENSHOP" style="height: 60px; margin-bottom: 20px;">
+        
+        <h2>เข้าสู่ระบบ</h2>
+
+        <% if (message) { %>
+            <p class="error">
+                <%= message %>
+            </p>
+        <% } %>
+
+        <form action="/login" method="POST">
+            <input type="email" name="email" placeholder="อีเมลของคุณ" required>
+            <input type="password" name="password" placeholder="รหัสผ่าน" required>
+            <button type="submit">Login</button>
+        </form>
+
+        <div class="register-link">
+            ยังไม่มีบัญชี OWENSHOP ใช่ไหม? <br>
+            <a href="/register">สมัครสมาชิกที่นี่</a>
+        </div>
+    </div>
+</body>
+
+</html>

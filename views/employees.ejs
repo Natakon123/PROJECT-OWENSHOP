@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="js/jquery-3.4.1.slim.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    
+    <style>
+        .table thead {
+            background-color: #1a1d20;
+            color: white;
+        }
+        .badge {
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 11px;
+        }
+        /* สีทองสำหรับ Manager */
+        .bg-warning-custom {
+            background-color: #ffc107;
+            color: #000;
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('navbar.ejs') %>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-users-cog mr-2"></i> จัดการพนักงาน</h2>
+        <a href="/employees/add" class="btn btn-primary shadow-sm">
+            <i class="fas fa-user-plus mr-1"></i> เพิ่มพนักงานใหม่
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="thead-dark">
+                    <tr>
+                        <th class="px-4">ชื่อพนักงาน</th>
+                        <th>อีเมล (Email)</th>
+                        <th class="text-center">ตำแหน่ง (Role)</th>
+                        <th class="text-center">การจัดการ</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <% employees.forEach(function(emp){ %>
+                    <tr>
+                        <td class="align-middle px-4 font-weight-bold">
+                            <%= emp.name %>
+                        </td>
+                        <td class="align-middle text-muted">
+                            <%= emp.email %>
+                        </td>
+                        <td class="align-middle text-center">
+                            <% if(emp.role === 'owner'){ %>
+                                <span class="badge bg-danger text-white"><i class="fas fa-crown mr-1"></i> Owner</span>
+                            <% } else if(emp.role === 'manager'){ %>
+                                <span class="badge bg-warning-custom"><i class="fas fa-user-tie mr-1"></i> Manager</span>
+                            <% } else { %>
+                                <span class="badge bg-info text-white"><i class="fas fa-user mr-1"></i> Staff</span>
+                            <% } %>
+                        </td>
+
+                        <td class="align-middle text-center">
+                            <a href="/employees/delete/<%= emp._id %>" 
+                               class="btn btn-outline-danger btn-sm"
+                               onclick="return confirm('คุณแน่ใจหรือไม่ว่าต้องการลบพนักงานท่านนี้?')">
+                                <i class="fas fa-trash-alt"></i> ลบพนักงาน
+                            </a>
+                        </td>
+                    </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <% if(employees.length === 0) { %>
+        <div class="text-center mt-5">
+            <p class="text-muted">ยังไม่มีข้อมูลพนักงานในระบบ</p>
+        </div>
+    <% } %>
+</div>
+</body>
+</html>

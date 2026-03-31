@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sales List</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Sales List</h1>
+        <a href="/sales/new" class="btn">➕ Add New Sale</a>
+        <a href="/" class="btn-cancel">กลับหน้าแรก</a>
+        <table>
+            <tr>
+                <th>Product</th>
+                <th>Member</th>
+                <th>Quantity</th>
+                <th>Total Price</th>
+                <th>Date</th>
+            </tr>
+            <% sales.forEach(sale=> { %>
+                <tr>
+                    <td>
+                        <%= sale.product.name %>
+                    </td>
+                    <td>
+                        <%= sale.member.name %>
+                    </td>
+                    <td>
+                        <%= sale.quantity %>
+                    </td>
+                    <td>$<%= sale.totalPrice.toFixed(2) %>
+                    </td>
+                    <td>
+                        <%= sale.date.toDateString() %>
+                    </td>
+                </tr>
+                <% }) %>
+        </table>
+    </div>
+</body>
+
+</html>

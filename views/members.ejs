@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <style>
+        body { background-color: #f8f9fa; font-family: 'Sarabun', sans-serif; }
+        .card { border: none; border-radius: 15px; }
+        .table thead { background-color: #343a40; color: white; }
+        .table thead th { border: none; }
+        .search-box { border-radius: 20px; padding-left: 45px; height: 45px; border: 2px solid #ddd; transition: 0.3s; }
+        .search-box:focus { border-color: #28a745; box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25); outline: none; }
+        .search-icon { position: absolute; left: 15px; top: 12px; color: #888; }
+        .member-row:hover { background-color: #f1f3f5 !important; transition: 0.3s; }
+        .badge-points { font-size: 0.9rem; padding: 6px 12px; border-radius: 20px; font-weight: bold; }
+    </style>
+</head>
+
+<body>
+    <%- include('navbar.ejs') %>
+
+    <div class="container mt-5">
+        <div class="row mb-4 align-items-center">
+            <div class="col-md-6">
+                <h2 class="font-weight-bold text-dark"><i class="fas fa-users-cog mr-2"></i> จัดการสมาชิก</h2>
+                <p class="text-muted">ตรวจสอบและบริหารจัดการข้อมูลสมาชิกในระบบ ITMI Shop</p>
+            </div>
+            <div class="col-md-6 text-md-right">
+                <a href="/register" class="btn btn-success btn-lg shadow-sm">
+                    <i class="fas fa-user-plus mr-2"></i> สมัครสมาชิกใหม่
+                </a>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card shadow-sm p-3 bg-white">
+                    <small class="text-muted font-weight-bold">จำนวนสมาชิกทั้งหมด</small>
+                    <h3 class="mb-0 text-primary"><span id="memberCount"><%= members.length %></span> <small>คน</small></h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <div class="position-relative">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="searchInput" class="form-control search-box shadow-none" placeholder="ค้นหาด้วยชื่อ, Email หรือเบอร์โทรศัพท์...">
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm overflow-hidden">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th class="py-3 px-4">ชื่อสมาชิก</th>
+                            <th class="py-3">Email</th>
+                            <th class="py-3 text-center">เบอร์โทร</th>
+                            <th class="py-3 text-center" style="width: 200px;">จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="memberTable">
+                        <% if (members.length > 0) { %>
+                            <% members.forEach(function(member){ %>
+                            <tr class="member-row">
+                                <td class="py-3 px-4 font-weight-bold text-dark"><%= member.name %></td>
+                                <td class="py-3 text-muted"><%= member.email %></td>
+                                <td class="py-3 text-center"><%= member.phone || '-' %></td>
+                            
+                                <td class="py-3 text-center">
+                                    <div class="btn-group shadow-sm">
+                                        <a href="/members/edit/<%= member._id %>" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a class="btn btn-sm btn-outline-danger" 
+                                           href="/members/delete/<%= member._id %>" 
+                                           onclick="return confirm('❗ คุณแน่ใจหรือไม่ว่าต้องการลบสมาชิกคนนี้?')">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr id="noDataRow">
+                                <td colspan="5" class="text-center py-5 text-muted">
+                                    <i class="fas fa-user-slash fa-3x mb-3"></i><br>
+                                    ไม่มีข้อมูลสมาชิกในขณะนี้
+                                </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/jquery-3.4.1.slim.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+
+    <script>
+        // ระบบค้นหาอัจฉริยะ
+        document.getElementById("searchInput").addEventListener("keyup", function () {
+            let filter = this.value.toLowerCase().trim();
+            let rows = document.querySelectorAll("#memberTable tr.member-row");
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                let name = row.cells[0].textContent.toLowerCase();
+                let email = row.cells[1].textContent.toLowerCase();
+                let phone = row.cells[2].textContent.toLowerCase();
+
+                if (name.includes(filter) || email.includes(filter) || phone.includes(filter)) {
+                    row.style.display = "";
+                    visibleCount++;
+                } else {
+                    row.style.display = "none";
+                }
+            });
+
+            // อัปเดตตัวเลขจำนวนสมาชิกตามการค้นหา
+            document.getElementById("memberCount").innerText = visibleCount;
+        });
+    </script>
+</body>
+</html>

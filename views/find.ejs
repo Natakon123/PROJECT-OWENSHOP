@@ -1,0 +1,49 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap" rel="stylesheet">
+ <%- include('navbar.ejs') %>   
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ค้นหาสินค้า</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container mt-4">
+        <h2>🔍 ค้นหาสินค้า</h2>
+        <form action="/find" method="GET" class="border p-4 shadow">
+            <div class="mb-3">
+                <label class="form-label">ชื่อสินค้า (Exact Match)</label>
+                <input type="text" class="form-control" name="name">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">ราคาตั้งแต่ (≥)</label>
+                <input type="number" class="form-control" name="minPrice">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">ราคาสูงสุด (≤)</label>
+                <input type="number" class="form-control" name="maxPrice">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">ยกเว้นสินค้า (≠)</label>
+                <input type="text" class="form-control" name="exclude">
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" name="highPriceOnly">
+                <label class="form-check-label">แสดงเฉพาะสินค้าที่มีราคามากกว่า 5000</label>
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" name="lowPriceOnly">
+                <label class="form-check-label">แสดงเฉพาะสินค้าที่มีราคาต่ำกว่า 2000</label>
+            </div>
+            <button type="submit" class="btn btn-primary">ค้นหา</button>
+        </form>
+    </div>
+</body>
+
+</html>

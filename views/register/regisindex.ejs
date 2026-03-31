@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | OWENSHOP</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        body {
+            background-color: #f4f7f6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* ใช้ min-height เพราะหน้าสมัครยาวกว่า Login */
+            margin: 0;
+            padding: 20px 0;
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        h2 {
+            color: #1a1d20;
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+
+        .error-bar {
+            background-color: #fdeaea;
+            color: #e74c3c;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            border-left: 5px solid #e74c3c;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 5px;
+            margin-top: 10px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            border-color: #007AFF;
+            outline: none;
+            box-shadow: 0 0 8px rgba(0, 122, 255, 0.2);
+        }
+
+        .btn-group {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        button[type="submit"] {
+            background-color: #007AFF; /* สีฟ้า Electric Blue ตามธีม */
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .btn-cancel {
+            text-align: center;
+            padding: 12px;
+            color: #888;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .btn-cancel:hover {
+            color: #333;
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .footer-text a {
+            color: #007AFF;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .footer-text a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div style="text-align: center;">
+            <img src="/images/home/OWEN-Photoroom (1).png" alt="OWENSHOP" style="height: 50px; margin-bottom: 15px;">
+        </div>
+
+        <h2>สมัครสมาชิกใหม่</h2>
+        
+        <% if (typeof error !== "undefined" ) { %>
+            <div class="error-bar">
+                <i class="fas fa-exclamation-circle"></i> <%= error %>
+            </div>
+        <% } %>
+
+        <form action="/register" method="POST">
+            <label>ชื่อ-นามสกุล</label>
+            <input type="text" name="name" placeholder="กรอกชื่อของคุณ" required value="<%= old.name || '' %>">
+
+            <label>อีเมล</label>
+            <input type="email" name="email" placeholder="example@mail.com" required value="<%= old.email || '' %>">
+
+            <label>เบอร์โทรศัพท์</label>
+            <input type="text" name="phone" placeholder="08x-xxx-xxxx" required value="<%= old.phone || '' %>">
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div>
+                    <label>รหัสผ่าน</label>
+                    <input type="password" name="password" placeholder="••••••••" required>
+                </div>
+                <div>
+                    <label>ยืนยันรหัสผ่าน</label>
+                    <input type="password" name="confirmPassword" placeholder="••••••••" required>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button type="submit" onclick="return confirm('ยืนยันข้อมูลการสมัครสมาชิกใช่หรือไม่?')">
+                    ลงทะเบียนใช้งาน
+                </button>
+                <a href="/" class="btn-cancel">ยกเลิกและกลับหน้าแรก</a>
+            </div>
+        </form>
+
+        <div class="footer-text">
+            มีบัญชี OWENSHOP อยู่แล้ว? <a href="/login">เข้าสู่ระบบ</a>
+        </div>
+    </div>
+</body>
+
+</html>
