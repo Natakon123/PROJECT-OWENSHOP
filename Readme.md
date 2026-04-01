@@ -5,7 +5,7 @@ Node.js (แนะนำเวอร์ชัน 16.x ขึ้นไป)
 
 MongoDB (จะใช้แบบติดตั้งในเครื่อง หรือ MongoDB Atlas ก็ได้) 
 
-2. ติดตั้ง Library พิมพ์ npm install ใน terminal
+2. ติดตั้ง Library พิมพ์ npm install และ npm audit fix ใน terminal
 
 
 3.การตั้งค่าฐานข้อมูล (Database Configuration)
