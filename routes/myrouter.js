@@ -140,16 +140,6 @@ router.get('/employees', isLogin, async (req, res) => {
     }
 });
 
-// 🔑 อนุมัติพนักงาน (ต้องล็อกอิน)
-router.get('/approve', isLogin, async (req, res) => {
-    const users = await Employee.find({ status: 'pending' });
-    res.render('approve', { 
-        users: users, 
-        title: "Approve Employee", 
-        user: req.session.user || null 
-    });
-});
-
 router.get('/approve/:id', isLogin, async (req, res) => {
     await Employee.findByIdAndUpdate(req.params.id, { status: 'approved' });
     res.redirect('/approve');
@@ -476,9 +466,10 @@ router.get("/register", (req, res) => {
     });
 });
 // ระบบบันทึกการสมัครสมาชิก
+// ระบบบันทึกการสมัครสมาชิก (สมัครแล้วเข้า Member ทันที ไม่ต้องรออนุมัติ)
 router.post("/register", async (req, res) => {
     try {
-        const { name, email, phone, password, confirmPassword, role } = req.body;
+        const { name, email, phone, password, confirmPassword } = req.body;
 
         // 1. เช็คว่ารหัสผ่านตรงกันไหม
         if (password !== confirmPassword) {
@@ -486,14 +477,13 @@ router.post("/register", async (req, res) => {
                 title: "สมัครสมาชิก",
                 user: null,
                 error: "รหัสผ่านไม่ตรงกัน",
-                old: req.body // ส่งค่าเดิมกลับไปโชว์ใน Input
+                old: req.body
             });
         }
 
-        // 2. เช็คว่าอีเมลซ้ำในระบบไหนหรือเปล่า
+        // 2. เช็คว่าอีเมลซ้ำไหม
         const checkMember = await Member.findOne({ email });
-        const checkEmployee = await Employee.findOne({ email });
-        if (checkMember || checkEmployee) {
+        if (checkMember) {
             return res.render("register/regisindex", {
                 title: "สมัครสมาชิก",
                 user: null,
@@ -505,32 +495,25 @@ router.post("/register", async (req, res) => {
         // 3. เข้ารหัสรหัสผ่าน
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // 4. บันทึกตาม Role ที่เลือก
-        if (role === 'customer') {
-            const newMember = new Member({
-                name, email, phone, 
-                password: hashedPassword, 
-                role: 'member'
-            });
-            await newMember.save();
-            res.send('<script>alert("สมัครสมาชิกสำเร็จ! กรุณาเข้าสู่ระบบ"); window.location="/login";</script>');
-        } else {
-            const newEmployee = new Employee({
-                name, email, 
-                password: hashedPassword, 
-                role: 'staff',
-                status: 'pending' // พนักงานต้องรออนุมัติก่อน
-            });
-            await newEmployee.save();
-            res.send('<script>alert("ลงทะเบียนพนักงานสำเร็จ! กรุณารอเจ้าของร้านอนุมัติ"); window.location="/login";</script>');
-        }
+        // 4. บันทึกลง Member (กำหนด Role เป็น member อัตโนมัติ และไม่มีสถานะ pending)
+        const newMember = new Member({
+            name, 
+            email, 
+            phone, 
+            password: hashedPassword, 
+            role: 'member'
+        });
+        
+        await newMember.save();
+        
+        // ส่ง Alert แจ้งว่าใช้งานได้ทันที
+        res.send('<script>alert("สมัครสมาชิกสำเร็จ! เข้าสู่ระบบได้ทันที"); window.location="/login";</script>');
 
     } catch (error) {
         console.error(error);
         res.status(500).send("เกิดข้อผิดพลาดในการสมัครสมาชิก");
     }
 });
-
 const Coupon = require('../models/coupons');
 
 // API สำหรับตรวจสอบคูปอง
