@@ -1,34 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title><%= title %></title>
-        <link rel="stylesheet" href="css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
-        <script src="js/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-        <script src="js/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-        <script src="js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous" />
-    </head>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= product.name %> | ITMI Shop</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Sarabun:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
 
-    <body>
-        <%- include('navbar.ejs') %>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-2"></div>
-                <div class="col-lg-8">
-                    
-                    <div class="card mt-4">
-                        <img class="card-img-top img-fluid" src="./images/products/<%= product.image %>" alt="" />                        
-                        <div class="card-body">
-                            <h3 class="card-title"><%= product.name %></h3>
-                            <h4>ราคาสินค้า</h4>
-                            <p class="card-text"><%= product.description %></p>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+    <style>
+        body { 
+            font-family: 'Inter', 'Sarabun', sans-serif;
+            background-color: #ffffff; 
+            color: #1e293b;
+        }
+
+        .product-container {
+            padding-top: 80px;
+            padding-bottom: 100px;
+        }
+
+        .product-visual {
+            background: #f8fafc;
+            border-radius: 40px;
+            padding: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: sticky;
+            top: 100px;
+        }
+
+        .product-visual img {
+            max-height: 500px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .product-info {
+            padding-left: 50px;
+        }
+
+        .brand-tag {
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            color: #d4af37;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+        }
+
+        .product-name {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 25px;
+        }
+
+        .current-price {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .currency {
+            font-size: 1.2rem;
+            color: #94a3b8;
+        }
+
+        .description-text {
+            color: #475569;
+            line-height: 1.8;
+        }
+
+        .btn-buy {
+            background: #1a1d20;
+            color: white;
+            border-radius: 15px;
+            padding: 18px;
+            font-weight: 700;
+            width: 100%;
+            border: none;
+            transition: 0.3s;
+        }
+
+        .btn-buy:hover {
+            background: #d4af37;
+            color: #000;
+        }
+
+        .stock-status {
+            margin-top: 15px;
+        }
+
+        @media (max-width: 991px) {
+            .product-info { padding-left: 10px; margin-top: 30px; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <%- include('navbar.ejs') %>
+
+    <div class="container product-container">
+        <div class="row">
+            
+            <!-- LEFT: IMAGE -->
+            <div class="col-lg-6">
+                <div class="product-visual">
+                    <img src="/images/products/<%= product.image %>" 
+                         alt="<%= product.name %>"
+                         onerror="this.src='https://placehold.co/600x600?text=ITMI+Product'">
+                </div>
+            </div>
+
+            <!-- RIGHT: INFO -->
+            <div class="col-lg-6">
+                <div class="product-info">
+
+                    <span class="brand-tag">ITMI Original Series</span>
+
+                    <h1 class="product-name"><%= product.name %></h1>
+
+                    <div class="current-price">
+                        <%= (product.price || 0).toLocaleString() %> 
+                        <span class="currency">฿</span>
+                    </div>
+
+                    <hr>
+
+                    <p class="description-text">
+                        <%= product.description %>
+                    </p>
+
+                    <!-- 🔥 ACTION BUTTONS -->
+                    <div class="row mt-4">
+
+                        <!-- ADD TO CART -->
+                        <div class="col-md-6 mb-2">
+                            <form action="/cart/add/<%= product._id %>" method="GET">
+                                <button class="btn btn-outline-dark w-100 py-3" style="border-radius: 12px;">
+                                    <i class="fas fa-cart-plus"></i> Add to Cart
+                                </button>
+                            </form>
                         </div>
+
+                        <!-- BUY NOW -->
+                        <div class="col-md-6 mb-2">
+                            <form action="/sales/pos-from-cart" method="POST">
+                                <input type="hidden" name="productIds[]" value="<%= product._id %>">
+                                <button class="btn-buy">
+                                    <i class="fas fa-bolt"></i> Buy Now
+                                </button>
+                            </form>
+                        </div>
+
+                    </div>
+
+                    <!-- STOCK -->
+                    <div class="stock-status text-success small">
+                        ✔ มีสินค้า พร้อมส่งทันที
                     </div>
 
                 </div>
             </div>
+
         </div>
-    </body>
+    </div>
+
+    <script src="/js/bootstrap.min.js"></script>
+
+</body>
 </html>

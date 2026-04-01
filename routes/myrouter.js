@@ -261,45 +261,62 @@ router.get("/sales/new", isLogin, async (req, res) => {
 });
 
 // 💰 บันทึกข้อมูลการขาย + ตัดสต็อก
+// ✅ แก้ไขส่วนบันทึกการขายใน myrouter.js
+// 💰 บันทึกข้อมูลการขาย + ตัดสต็อก
 router.post("/sales/insert", isLogin, async (req, res) => {
     try {
-        const { product, member, quantity, paymentMethod, discount, date } = req.body;
-        const productData = await Product.findById(product);
-        if (!productData) return res.status(404).send("ไม่พบสินค้าในระบบ");
-
-        const qty = parseInt(quantity) || 1;
-        if (productData.stock < qty) {
-            return res.send(`<script>alert("สินค้าไม่พอ! เหลือเพียง ${productData.stock} ชิ้น"); window.history.back();</script>`);
+        const { member, paymentMethod, discount, items } = req.body;
+        const itemList = Object.values(items);
+        
+        // 1. คำนวณหา Subtotal ทั้งหมดก่อน เพื่อหาจำนวนเงินส่วนลด
+        let totalBeforeDiscount = 0;
+        for (let item of itemList) {
+            const p = await Product.findById(item.product);
+            if (p) totalBeforeDiscount += (p.price * (parseInt(item.quantity) || 1));
         }
 
-        const price = productData.price;
-        const disc = parseFloat(discount) || 0;
-        const cost = productData.cost || (price * 0.7); 
+        // 2. แปลง % เป็นจำนวนเงิน (บาท)
+        const discountPercent = parseFloat(discount) || 0;
+        const totalDiscountBaht = (totalBeforeDiscount * discountPercent) / 100;
+        
+        // ส่วนลดเฉลี่ยต่อรายการสินค้า
+        const discountPerItem = totalDiscountBaht / itemList.length;
 
-        const newSale = new Sale({
-            product: product,
-            member: member || null,
-            seller: req.session.user.id, 
-            quantity: qty,
-            //stock: stock,
-            priceAtSale: price,
-            costAtSale: cost,
-            discount: disc,
-            totalPrice: (price * qty) - disc,
-            paymentMethod: paymentMethod || 'Cash',
-            date: date ? new Date(date) : new Date()
-        });
+        let lastSavedSaleId = "";
 
-        const savedSale = await newSale.save();
+        for (let item of itemList) {
+            const productData = await Product.findById(item.product);
+            if (!productData) continue;
 
-        await Product.findByIdAndUpdate(product, { $inc: { stock: -qty } });
+            const qty = parseInt(item.quantity) || 1;
+            const price = productData.price;
 
-        res.redirect(`/sales/receipt/${savedSale._id}`);
+            // ตัดสต็อก
+            await Product.findByIdAndUpdate(item.product, { $inc: { stock: -qty } });
+
+            // บันทึก Sale
+            const newSale = new Sale({
+                product: item.product,
+                member: member || null,
+                seller: req.session.user.id,
+                quantity: qty,
+                priceAtSale: price,
+                costAtSale: productData.cost || (price * 0.7),
+                discount: discountPerItem, // บันทึกเป็นจำนวนบาทที่ลดไป
+                totalPrice: (price * qty) - discountPerItem,
+                paymentMethod: paymentMethod || 'Cash',
+                date: new Date()
+            });
+            const saved = await newSale.save();
+            lastSavedSaleId = saved._id;
+        }
+
+        req.session.cart = [];
+        res.redirect(`/sales/receipt/${lastSavedSaleId}`);
     } catch (error) {
-        res.status(500).send("เกิดข้อผิดพลาด: " + error.message);
+        res.status(500).send(error.message);
     }
 });
-
 // 🧾 ใบเสร็จ (ต้องล็อกอิน)
 router.get("/sales/receipt/:id", isLogin, async (req, res) => {
     try {
@@ -540,6 +557,121 @@ router.post('/api/check-coupon', async (req, res) => {
         res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาด' });
     }
 });
+// หน้าแสดงฟอร์มบันทึกการขาย (POS)
+router.get('/newsale', async (req, res) => {
+    try {
+        const products = await Product.find({});
+        const members = await Member.find({});
+        
+        // ตรวจสอบว่ามีการส่ง Product ID มาจากรถเข็นไหม (Query String)
+        const selectedProductId = req.query.product_id || null;
+        
+        res.render('sales/new', { 
+            products, 
+            members, 
+            selectedProductId // ส่ง ID ที่เลือกไปที่หน้า View
+        });
+    } catch (err) {
+        res.status(500).send("Error loading POS");
+    }
+});
+// --- 🛒 เพิ่มส่วนนี้เข้าไปใน myrouter.js (วางไว้ก่อน router.get('/:id', ...)) ---
+
+// 1. เพิ่มสินค้าลงรถเข็น
+router.get('/cart/add/:id', (req, res) => {
+    const productId = req.params.id;
+
+    if (!req.session.cart) {
+        req.session.cart = [];
+    }
+
+    const existing = req.session.cart.find(item => item.productId == productId);
+
+    if (existing) {
+        existing.qty += 1;
+    } else {
+        req.session.cart.push({ productId, qty: 1 });
+    }
+
+    console.log("🛒 CART:", req.session.cart);
+
+    res.redirect('/cart');
+});
+
+// 2. แสดงหน้าตะกร้า
+router.get('/cart', async (req, res) => {
+    try {
+        const cart = req.session.cart || [];
+
+        const productIds = cart.map(item => item.productId);
+
+        const products = await Product.find({ _id: { $in: productIds } });
+
+        const cartItems = cart.map((item, index) => {
+            const product = products.find(p => p._id.toString() === item.productId);
+
+            if (!product) return null;
+
+            return {
+                ...product.toObject(),
+                qty: item.qty,
+                index: index // 🔥 สำคัญ ใช้ลบ
+            };
+        }).filter(item => item !== null);
+
+        const totalPrice = cartItems.reduce((sum, item) => {
+            return sum + (item.price * item.qty);
+        }, 0);
+
+        res.render('cart', {
+            cart: cartItems,
+            totalPrice,
+            title: "Your Premium Bag",
+            user: req.session.user || null
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.redirect('/');
+    }
+});
+
+// 3. ลบสินค้าออกจากรถเข็น (เผื่อไว้กดลบในหน้า Cart)
+router.get('/cart/remove/:index', (req, res) => {
+    if (req.session.cart) {
+        req.session.cart.splice(req.params.index, 1);
+    }
+    res.redirect('/cart');
+});
+// Route ใหม่: รับข้อมูลจากตะกร้า แล้ววาร์ปไปหน้า newsale
+// ใน myrouter.js
+router.post('/sales/pos-from-cart', isLogin, async (req, res) => {
+    try {
+        // ดึงค่าได้ทั้งแบบ productIds และ productIds[]
+        let ids = req.body['productIds[]'] || req.body.productIds;
+
+        if (!ids) return res.redirect('/cart');
+
+        // บังคับให้เป็น Array
+        if (!Array.isArray(ids)) ids = [ids];
+
+        const selectedProducts = await Product.find({ _id: { $in: ids } });
+        const members = await Member.find({});
+        const products = await Product.find({});
+
+        res.render('sales/newsale', { 
+            title: "Transaction",
+            user: req.session.user,
+            members,
+            products,
+            selectedProducts // ชื่อต้องตรงกับที่ใช้ใน newsale.ejs
+        });
+    } catch (err) {
+        console.log(err);
+        res.redirect('/cart');
+    }
+});
+
 router.get('/:id', async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
@@ -548,4 +680,5 @@ router.get('/:id', async (req, res) => {
         res.redirect('/');
     }
 });
+
 module.exports = router;

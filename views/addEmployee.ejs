@@ -3,46 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title || 'เพิ่มพนักงาน' %></title>
-
+    <title><%= title || 'New Associate' %></title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        body {
+            background-color: #fdfdfd;
+            font-family: 'Inter', sans-serif;
+            color: #333;
+        }
+
+        .registration-card {
+            background: white;
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+            padding: 40px;
+            max-width: 550px;
+            margin: 60px auto;
+            transition: transform 0.3s ease;
+        }
+
+        .form-title {
+            font-weight: 600;
+            letter-spacing: -1px;
+            color: #1a1a1a;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .input-group-custom {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .input-group-custom label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #999;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-control-custom {
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 12px 15px;
+            width: 100%;
+            background: #f9f9f9;
+            transition: all 0.3s;
+        }
+
+        .form-control-custom:focus {
+            outline: none;
+            background: white;
+            border-color: #d4af37; /* สีทองตามคอนเซปต์ Navbar */
+            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
+        }
+
+        .btn-save {
+            background: #1a1a1a;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 14px;
+            width: 100%;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        .btn-save:hover {
+            background: #d4af37;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-back {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #999;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: 0.3s;
+        }
+
+        .btn-back:hover {
+            color: #333;
+        }
+
+        /* ตกแต่ง Select box */
+        select.form-control-custom {
+            appearance: none;
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body>
     <%- include('navbar.ejs') %>
 
-    <div class="container mt-4">
-        <h2>เพิ่มพนักงาน</h2>
+    <div class="container">
+        <div class="registration-card">
+            <h2 class="form-title">
+                <i class="fa-solid fa-user-plus mr-2" style="color: #d4af37;"></i>
+                Add Associate
+            </h2>
 
-        <form action="/employees/add" method="POST">
-        <div class="mb-3">
-         <label>Email</label>
-         <input type="email" name="email" class="form-control" required>
+            <form action="/employees/add" method="POST">
+                <div class="input-group-custom">
+                    <label><i class="fa-regular fa-envelope mr-1"></i> Email Address</label>
+                    <input type="email" name="email" class="form-control-custom" placeholder="e.g. owen@shop.com" required>
+                </div>
+
+                <div class="input-group-custom">
+                    <label><i class="fa-regular fa-user mr-1"></i> Full Name</label>
+                    <input type="text" name="name" class="form-control-custom" placeholder="e.g. John Doe" required>
+                </div>
+
+                <div class="input-group-custom">
+                    <label><i class="fa-solid fa-lock mr-1"></i> Temporary Password</label>
+                    <input type="password" name="password" class="form-control-custom" placeholder="••••••••" required>
+                </div>
+
+                <div class="input-group-custom">
+                    <label><i class="fa-solid fa-shield-halved mr-1"></i> Access Level</label>
+                    <select name="role" class="form-control-custom">
+                        <option value="staff">Standard Staff</option>
+                        <option value="owner">System Admin (Owner)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-save">
+                    Create Account
+                </button>
+                
+                <a href="/employees" class="btn-back">
+                    <i class="fa-solid fa-arrow-left-long mr-1"></i> Back to Team Directory
+                </a>
+            </form>
         </div>
-            <div class="mb-3">
-                <label>ชื่อ</label>
-                <input type="text" name="name" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label>Password</label>
-                <input type="password" name="password" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label>Role</label>
-                <select name="role" class="form-control">
-                    <option value="staff">พนักงาน</option>
-                    <option value="owner">เจ้าของร้าน</option>
-                </select>
-            </div>
-
-            <button class="btn btn-success">บันทึก</button>
-            <a href="/employees" class="btn btn-secondary">กลับ</a>
-            <div class="mb-3">
-
-
-        </form>
     </div>
 </body>
 </html>

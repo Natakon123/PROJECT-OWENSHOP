@@ -4,120 +4,200 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | OWENSHOP</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <title>Secure Access | OWENSHOP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
-        /* สไตล์เพิ่มเติมเพื่อให้ดู Modern Tech */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            background-color: #f4f7f6;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f1113; /* พื้นหลังเข้มสนิท */
+            font-family: 'Inter', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
+            overflow: hidden;
         }
 
-        .container {
-            background: #ffffff;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        /* เอฟเฟกต์แสงพื้นหลังจางๆ */
+        body::before {
+            content: "";
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+            top: -50px;
+            right: -50px;
+        }
+
+        .login-card {
+            background: #1a1d20;
+            padding: 50px 40px;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
             text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand-logo {
+            height: 55px;
+            margin-bottom: 30px;
+            filter: brightness(1.2);
         }
 
         h2 {
-            color: #1a1d20;
-            margin-bottom: 30px;
+            color: #ffffff;
+            margin-bottom: 10px;
             font-weight: 700;
+            letter-spacing: -0.5px;
+            font-size: 1.5rem;
         }
 
-        .error {
-            color: #e74c3c;
-            background: #fdeaea;
-            padding: 10px;
-            border-radius: 5px;
-            font-size: 14px;
-            margin-bottom: 20px;
+        p.subtitle {
+            color: #888;
+            font-size: 0.85rem;
+            margin-bottom: 35px;
+        }
+
+        .error-box {
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 107, 107, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            color: #aaa;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            margin-left: 5px;
         }
 
         input {
             width: 100%;
-            padding: 12px 15px;
-            margin: 8px 0;
-            display: inline-block;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-sizing: border-box;
-            transition: 0.3s;
+            padding: 14px 18px;
+            background: #25282c;
+            border: 1px solid #333;
+            border-radius: 12px;
+            color: white;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         input:focus {
-            border-color: #007AFF;
+            border-color: #d4af37; /* สีทองเมื่อโฟกัส */
+            background: #2c2f34;
             outline: none;
-            box-shadow: 0 0 8px rgba(0, 122, 255, 0.2);
+            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
         }
 
         button {
-            background-color: #1a1d20;
-            color: white;
-            padding: 14px 20px;
-            margin: 20px 0;
+            background: #d4af37; /* ปุ่มสีทองพรีเมียม */
+            color: #000;
+            padding: 16px;
+            margin-top: 15px;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
             width: 100%;
-            font-weight: bold;
-            font-size: 16px;
-            transition: 0.3s;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         button:hover {
-            background-color: #007AFF; /* เปลี่ยนเป็นสีฟ้าตามธีมร้านตอน Hover */
+            background: #f1c40f;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
         }
 
-        /* ส่วนที่ขอเพิ่ม: ลิงก์ไปหน้าสมัครสมาชิก */
-        .register-link {
-            margin-top: 15px;
-            font-size: 14px;
+        .footer-links {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+            font-size: 0.85rem;
             color: #666;
         }
 
-        .register-link a {
-            color: #007AFF;
+        .footer-links a {
+            color: #d4af37;
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 600;
+            transition: 0.2s;
         }
 
-        .register-link a:hover {
-            text-decoration: underline;
+        .footer-links a:hover {
+            color: #ffffff;
+        }
+
+        /* เอฟเฟกต์ Fade In */
+        .animate-up {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <img src="/images/home/OWEN-Photoroom (1).png" alt="OWENSHOP" style="height: 60px; margin-bottom: 20px;">
+    <div class="login-card animate-up">
+        <img src="/images/home/OWEN-Photoroom (1).png" alt="OWENSHOP" class="brand-logo">
         
-        <h2>เข้าสู่ระบบ</h2>
+        <h2>เข้าสู่ระบบส่วนจัดการ</h2>
+        <p class="subtitle">กรุณาระบุข้อมูลเพื่อเข้าถึงระบบ OWENSHOP Enterprise</p>
 
         <% if (message) { %>
-            <p class="error">
-                <%= message %>
-            </p>
+            <div class="error-box">
+                <i class="fa-solid fa-circle-exclamation mr-2"></i> <%= message %>
+            </div>
         <% } %>
 
         <form action="/login" method="POST">
-            <input type="email" name="email" placeholder="อีเมลของคุณ" required>
-            <input type="password" name="password" placeholder="รหัสผ่าน" required>
-            <button type="submit">Login</button>
+            <div class="input-group">
+                <label>Authorized Email</label>
+                <input type="email" name="email" placeholder="name@example.com" required>
+            </div>
+
+            <div class="input-group">
+                <label>Security Password</label>
+                <input type="password" name="password" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit">Sign In to System</button>
         </form>
 
-        <div class="register-link">
-            ยังไม่มีบัญชี OWENSHOP ใช่ไหม? <br>
-            <a href="/register">สมัครสมาชิกที่นี่</a>
+        <div class="footer-links">
+            ยังไม่ได้เป็นส่วนหนึ่งของระบบ? <br>
+            <a href="/register">ลงทะเบียนใหม่</a>
         </div>
     </div>
 </body>

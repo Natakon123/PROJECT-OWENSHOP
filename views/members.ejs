@@ -3,96 +3,223 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= title %></title>
+    <title><%= title || 'Member Directory' %></title>
 
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        body { background-color: #f8f9fa; font-family: 'Sarabun', sans-serif; }
-        .card { border: none; border-radius: 15px; }
-        .table thead { background-color: #343a40; color: white; }
-        .table thead th { border: none; }
-        .search-box { border-radius: 20px; padding-left: 45px; height: 45px; border: 2px solid #ddd; transition: 0.3s; }
-        .search-box:focus { border-color: #28a745; box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25); outline: none; }
-        .search-icon { position: absolute; left: 15px; top: 12px; color: #888; }
-        .member-row:hover { background-color: #f1f3f5 !important; transition: 0.3s; }
-        .badge-points { font-size: 0.9rem; padding: 6px 12px; border-radius: 20px; font-weight: bold; }
+        body { 
+            background-color: #f8fafc; 
+            font-family: 'Inter', sans-serif; 
+            color: #1e293b;
+        }
+
+        .crm-card {
+            background: white;
+            border-radius: 24px;
+            border: none;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        /* Stats Card Section */
+        .stat-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            border-left: 5px solid #d4af37;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        }
+
+        /* Search Header */
+        .header-charcoal {
+            background: #1a1d20;
+            color: white;
+            padding: 35px;
+        }
+
+        .search-container {
+            position: relative;
+            max-width: 500px;
+        }
+
+        .search-container i {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+
+        #searchInput {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            padding: 12px 12px 12px 50px;
+            color: white;
+            transition: 0.3s;
+        }
+
+        #searchInput:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #d4af37;
+            box-shadow: none;
+            outline: none;
+        }
+
+        #searchInput::placeholder { color: #64748b; }
+
+        /* Table Design */
+        .table thead th {
+            background: #fdfdfd;
+            border-top: none;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 1.5px;
+            color: #94a3b8;
+            padding: 20px 25px;
+        }
+
+        .table tbody td {
+            vertical-align: middle;
+            padding: 18px 25px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        /* Avatar Circle */
+        .user-avatar {
+            width: 42px;
+            height: 42px;
+            background: #f1f5f9;
+            color: #475569;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-right: 15px;
+        }
+
+        /* Action Buttons */
+        .btn-action-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            border: 1px solid #e2e8f0;
+            background: white;
+            color: #64748b;
+        }
+
+        .btn-edit:hover { background: #eef2ff; color: #6366f1; border-color: #6366f1; }
+        .btn-delete:hover { background: #fff1f2; color: #f43f5e; border-color: #f43f5e; }
+
+        .btn-premium {
+            background: #d4af37;
+            color: #000;
+            font-weight: 700;
+            border-radius: 14px;
+            padding: 12px 28px;
+            transition: 0.3s;
+            border: none;
+        }
+
+        .btn-premium:hover {
+            background: #f1c40f;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
+            color: #000;
+        }
     </style>
 </head>
 
 <body>
     <%- include('navbar.ejs') %>
 
-    <div class="container mt-5">
-        <div class="row mb-4 align-items-center">
-            <div class="col-md-6">
-                <h2 class="font-weight-bold text-dark"><i class="fas fa-users-cog mr-2"></i> จัดการสมาชิก</h2>
-                <p class="text-muted">ตรวจสอบและบริหารจัดการข้อมูลสมาชิกในระบบ ITMI Shop</p>
+    <div class="container mt-5 mb-5">
+        <div class="row align-items-end mb-4">
+            <div class="col-md-7">
+                <h2 class="font-weight-bold" style="letter-spacing: -1.5px; font-size: 2.2rem;">Directory</h2>
+                <p class="text-muted mb-0">Overview of all active members within the OWENSHOP ecosystem.</p>
             </div>
-            <div class="col-md-6 text-md-right">
-                <a href="/register" class="btn btn-success btn-lg shadow-sm">
-                    <i class="fas fa-user-plus mr-2"></i> สมัครสมาชิกใหม่
+            <div class="col-md-5 text-md-right mt-3">
+                <div class="d-inline-block text-left mr-4">
+                    <small class="text-muted font-weight-bold text-uppercase" style="font-size: 0.65rem;">Active Users</small>
+                    <h4 class="font-weight-bold mb-0" id="memberCount"><%= members.length %></h4>
+                </div>
+                <a href="/register" class="btn btn-premium shadow-sm">
+                    <i class="fa-solid fa-user-plus mr-2"></i> Enroll Member
                 </a>
             </div>
         </div>
 
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <div class="card shadow-sm p-3 bg-white">
-                    <small class="text-muted font-weight-bold">จำนวนสมาชิกทั้งหมด</small>
-                    <h3 class="mb-0 text-primary"><span id="memberCount"><%= members.length %></span> <small>คน</small></h3>
+        <div class="crm-card shadow-lg">
+            <div class="header-charcoal">
+                <div class="search-container">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search name, email, or credentials...">
                 </div>
             </div>
-        </div>
 
-        <div class="card shadow-sm mb-4">
-            <div class="card-body">
-                <div class="position-relative">
-                    <i class="fas fa-search search-icon"></i>
-                    <input type="text" id="searchInput" class="form-control search-box shadow-none" placeholder="ค้นหาด้วยชื่อ, Email หรือเบอร์โทรศัพท์...">
-                </div>
-            </div>
-        </div>
-
-        <div class="card shadow-sm overflow-hidden">
             <div class="table-responsive">
-                <table class="table table-hover mb-0">
+                <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th class="py-3 px-4">ชื่อสมาชิก</th>
-                            <th class="py-3">Email</th>
-                            <th class="py-3 text-center">เบอร์โทร</th>
-                            <th class="py-3 text-center" style="width: 200px;">จัดการ</th>
+                            <th>Member Identity</th>
+                            <th>Contact Email</th>
+                            <th class="text-center">Phone</th>
+                            <th class="text-right">Administration</th>
                         </tr>
                     </thead>
                     <tbody id="memberTable">
                         <% if (members.length > 0) { %>
                             <% members.forEach(function(member){ %>
                             <tr class="member-row">
-                                <td class="py-3 px-4 font-weight-bold text-dark"><%= member.name %></td>
-                                <td class="py-3 text-muted"><%= member.email %></td>
-                                <td class="py-3 text-center"><%= member.phone || '-' %></td>
-                            
-                                <td class="py-3 text-center">
-                                    <div class="btn-group shadow-sm">
-                                        <a href="/members/edit/<%= member._id %>" class="btn btn-sm btn-outline-primary">
-                                            <i class="fas fa-edit"></i>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="user-avatar">
+                                            <%= member.name.charAt(0).toUpperCase() %>
+                                        </div>
+                                        <div>
+                                            <div class="font-weight-bold text-dark"><%= member.name %></div>
+                                            <small class="text-muted">ID: <%= member._id.toString().slice(-6).toUpperCase() %></small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-secondary"><%= member.email %></td>
+                                <td class="text-center">
+                                    <span class="badge badge-light py-2 px-3" style="border-radius: 10px;">
+                                        <%= member.phone || 'No Data' %>
+                                    </span>
+                                </td>
+                                <td class="text-right">
+                                    <div class="d-flex justify-content-end">
+                                        <a href="/members/edit/<%= member._id %>" class="btn-action-circle btn-edit mr-2" title="Edit Profile">
+                                            <i class="fa-solid fa-user-pen"></i>
                                         </a>
-                                        <a class="btn btn-sm btn-outline-danger" 
-                                           href="/members/delete/<%= member._id %>" 
-                                           onclick="return confirm('❗ คุณแน่ใจหรือไม่ว่าต้องการลบสมาชิกคนนี้?')">
-                                            <i class="fas fa-trash"></i>
+                                        <a href="/members/delete/<%= member._id %>" 
+                                           class="btn-action-circle btn-delete" 
+                                           onclick="return confirm('❗ Permanent Deletion: Are you sure you want to remove this member?')"
+                                           title="Terminate Access">
+                                            <i class="fa-solid fa-trash-can"></i>
                                         </a>
                                     </div>
                                 </td>
                             </tr>
                             <% }) %>
                         <% } else { %>
-                            <tr id="noDataRow">
-                                <td colspan="5" class="text-center py-5 text-muted">
-                                    <i class="fas fa-user-slash fa-3x mb-3"></i><br>
-                                    ไม่มีข้อมูลสมาชิกในขณะนี้
+                            <tr>
+                                <td colspan="4" class="text-center py-5">
+                                    <div class="py-4">
+                                        <i class="fa-solid fa-user-slash fa-3x text-light mb-3"></i>
+                                        <p class="text-muted">Database is currently empty.</p>
+                                    </div>
                                 </td>
                             </tr>
                         <% } %>
@@ -102,31 +229,22 @@
         </div>
     </div>
 
-    <script src="/js/jquery-3.4.1.slim.min.js"></script>
-    <script src="/js/popper.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>
-        // ระบบค้นหาอัจฉริยะ
         document.getElementById("searchInput").addEventListener("keyup", function () {
             let filter = this.value.toLowerCase().trim();
             let rows = document.querySelectorAll("#memberTable tr.member-row");
             let visibleCount = 0;
 
             rows.forEach(row => {
-                let name = row.cells[0].textContent.toLowerCase();
-                let email = row.cells[1].textContent.toLowerCase();
-                let phone = row.cells[2].textContent.toLowerCase();
-
-                if (name.includes(filter) || email.includes(filter) || phone.includes(filter)) {
+                let text = row.innerText.toLowerCase();
+                if (text.includes(filter)) {
                     row.style.display = "";
                     visibleCount++;
                 } else {
                     row.style.display = "none";
                 }
             });
-
-            // อัปเดตตัวเลขจำนวนสมาชิกตามการค้นหา
             document.getElementById("memberCount").innerText = visibleCount;
         });
     </script>

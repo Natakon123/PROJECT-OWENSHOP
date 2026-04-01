@@ -6,139 +6,296 @@
     <title>รายงานการขาย | ITMI Shop</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
 
     <style>
-        body { font-family: 'Sarabun', sans-serif; background-color: #f4f7f6; color: #444; }
-        /* ดัน Navbar ให้ลอยเหนือ Card เสมอ ป้องกันการโดนบัง */
-        .navbar { z-index: 1050 !important; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success-gradient: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            --danger-gradient: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+            --info-gradient: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+        }
+
+        body { 
+            font-family: 'Sarabun', 'Plus Jakarta Sans', sans-serif; 
+            background-color: #f0f2f5; 
+            color: #334155; 
+        }
+
+        .navbar { z-index: 1050 !important; box-shadow: 0 2px 15px rgba(0,0,0,0.05); }
+
+        /* Header Styling */
+        .page-header {
+            background: #fff;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        /* Stat Cards */
+        .stat-card {
+            border: none;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.08);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .bg-icon-primary { background: rgba(102, 126, 234, 0.1); color: #667eea; }
+        .bg-icon-success { background: rgba(40, 167, 69, 0.1); color: #28a745; }
+        .bg-icon-danger { background: rgba(255, 65, 108, 0.1); color: #ff416c; }
+        .bg-icon-info { background: rgba(33, 147, 176, 0.1); color: #2193b0; }
+
+        /* Filter Section */
+        .filter-card {
+            background: #fff;
+            border-radius: 20px;
+            border: 1px solid rgba(0,0,0,0.05);
+            padding: 1.5rem;
+        }
+
+        .form-control-custom {
+            border-radius: 12px;
+            border: 2px solid #f1f5f9;
+            padding: 0.6rem 1rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .form-control-custom:focus {
+            border-color: #667eea;
+            box-shadow: none;
+            background: #fdfdfd;
+        }
+
+        /* Table Styling */
+        .table-container {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            overflow: hidden;
+        }
+
+        .table thead th {
+            background: #f8fafc;
+            border: none;
+            color: #64748b;
+            font-weight: 700;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            padding: 1.2rem;
+        }
+
+        .table tbody td {
+            padding: 1.2rem;
+            vertical-align: middle;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .badge-pay {
+            padding: 6px 14px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+        }
+
+        .btn-pill {
+            border-radius: 12px;
+            padding: 10px 24px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn-primary-gradient {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary-gradient:hover {
+            filter: brightness(1.1);
+            color: white;
+            transform: scale(1.02);
+        }
+
+        .product-name { font-weight: 600; color: #1e293b; }
+        .member-info { font-size: 0.85rem; color: #64748b; }
         
-        .card { border-radius: 15px; border: none; }
-        .stat-card { border-left: 6px solid; transition: transform 0.2s; }
-        .stat-card:hover { transform: translateY(-5px); }
-        .filter-card { background: #fff; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .form-control-pill { border-radius: 20px; border: 1px solid #e0e0e0; padding: 10px 20px; }
-        .btn-pill { border-radius: 20px; padding: 8px 25px; }
-        .table thead th { background-color: #f8f9fa; border: none; text-transform: uppercase; font-size: 0.8rem; color: #888; }
-        .badge-pay { padding: 6px 12px; border-radius: 20px; font-weight: 600; font-size: 0.75rem; }
-        .bg-soft-success { background: #e8f5e9; color: #2e7d32; }
-        .bg-soft-info { background: #e3f2fd; color: #0288d1; }
     </style>
 </head>
 <body>
 
     <%- include('../navbar.ejs') %>
 
-    <div class="container mt-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h2 class="font-weight-bold mb-1">📊 รายงานวิเคราะห์การขาย</h2>
-                <p class="text-muted mb-0">สรุปภาพรวมและสถิติการขายของร้าน ITMI Shop</p>
+    <div class="page-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-left">
+                    <h2 class="font-weight-bold mb-1">📊 รายงานวิเคราะห์การขาย</h2>
+                    <p class="text-muted mb-0">ข้อมูลอัปเดตแบบ Real-time ของร้าน ITMI Shop</p>
+                </div>
+                <div class="col-md-6 text-center text-md-right mt-3 mt-md-0">
+                    <a href="/sales/new" class="btn btn-primary-gradient btn-pill shadow-lg">
+                        <i class="fas fa-cart-plus mr-2"></i> บันทึกขายใหม่
+                    </a>
+                </div>
             </div>
-            <a href="/sales/new" class="btn btn-success shadow-sm btn-pill">
-                <i class="fas fa-plus mr-2"></i> บันทึกขายใหม่
-            </a>
         </div>
+    </div>
 
-        <div class="card filter-card mb-4">
-            <div class="card-body">
-                <form action="/sales/report" method="GET" class="form-row align-items-end">
-                    <div class="col-md-4">
-                        <label class="small font-weight-bold text-muted">เริ่มต้นวันที่</label>
-                        <input type="date" name="startDate" class="form-control form-control-pill" value="<%= startDate %>">
+    <div class="container">
+        <div class="filter-card mb-5 shadow-sm">
+            <form action="/sales/report" method="GET" class="row align-items-end">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <label class="small font-weight-bold text-muted text-uppercase mb-2 d-block">ช่วงเริ่มต้น</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-white border-right-0" style="border-radius: 12px 0 0 12px; border: 2px solid #f1f5f9;"><i class="far fa-calendar-alt"></i></span>
+                        </div>
+                        <input type="date" name="startDate" class="form-control form-control-custom border-left-0" value="<%= startDate %>">
                     </div>
-                    <div class="col-md-4">
-                        <label class="small font-weight-bold text-muted">ถึงวันที่</label>
-                        <input type="date" name="endDate" class="form-control form-control-pill" value="<%= endDate %>">
+                </div>
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <label class="small font-weight-bold text-muted text-uppercase mb-2 d-block">สิ้นสุดวันที่</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-white border-right-0" style="border-radius: 12px 0 0 12px; border: 2px solid #f1f5f9;"><i class="fas fa-calendar-check"></i></span>
+                        </div>
+                        <input type="date" name="endDate" class="form-control form-control-custom border-left-0" value="<%= endDate %>">
                     </div>
-                    <div class="col-md-4 d-flex mt-3 mt-md-0">
-                        <button type="submit" class="btn btn-primary btn-pill shadow-sm flex-grow-1 mr-2">
-                            <i class="fas fa-search mr-2"></i> กรองข้อมูล
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex">
+                        <button type="submit" class="btn btn-dark btn-pill flex-grow-1 mr-2 shadow-sm">
+                            <i class="fas fa-filter mr-2"></i> กรองข้อมูล
                         </button>
-                        <a href="/sales/report" class="btn btn-outline-secondary btn-pill shadow-sm" title="ล้างค่าตัวกรอง">
-                            <i class="fas fa-sync-alt"></i>
+                        <a href="/sales/report" class="btn btn-light btn-pill border shadow-sm" title="ล้างค่า">
+                            <i class="fas fa-undo"></i>
                         </a>
                     </div>
-                </form>
+                </div>
+            </form>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card stat-card h-100 shadow-sm">
+                    <div class="card-body">
+                        <div class="stat-icon bg-icon-primary"><i class="fas fa-coins"></i></div>
+                        <h6 class="text-muted font-weight-bold mb-1">ยอดขายรวม</h6>
+                        <h3 class="font-weight-bold mb-0 text-dark"><%= stats.totalRevenue.toLocaleString() %> <small class="h6 text-muted">฿</small></h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card stat-card h-100 shadow-sm">
+                    <div class="card-body">
+                        <div class="stat-icon bg-icon-success"><i class="fas fa-chart-line"></i></div>
+                        <h6 class="text-muted font-weight-bold mb-1">กำไรสุทธิ</h6>
+                        <h3 class="font-weight-bold mb-0 text-success"><%= stats.totalProfit.toLocaleString() %> <small class="h6 text-muted font-weight-bold">฿</small></h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card stat-card h-100 shadow-sm">
+                    <div class="card-body">
+                        <div class="stat-icon bg-icon-danger"><i class="fas fa-percentage"></i></div>
+                        <h6 class="text-muted font-weight-bold mb-1">ส่วนลดสะสม</h6>
+                        <h3 class="font-weight-bold mb-0 text-danger"><%= stats.totalDiscount.toLocaleString() %> <small class="h6 text-muted">฿</small></h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card stat-card h-100 shadow-sm">
+                    <div class="card-body">
+                        <div class="stat-icon bg-icon-info"><i class="fas fa-qrcode"></i></div>
+                        <h6 class="text-muted font-weight-bold mb-1">รับผ่าน QR Code</h6>
+                        <h3 class="font-weight-bold mb-0 text-info"><%= stats.countQR.toLocaleString() %> <small class="h6 text-muted">฿</small></h3>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="row mb-4">
-            <div class="col-md-3 mb-3">
-                <div class="card shadow-sm stat-card border-primary h-100">
-                    <div class="card-body">
-                        <small class="text-muted font-weight-bold">ยอดขายรวม</small>
-                        <h3 class="text-primary mt-2 font-weight-bold"><%= stats.totalRevenue.toLocaleString() %> <small>฿</small></h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="card shadow-sm stat-card border-success h-100">
-                    <div class="card-body">
-                        <small class="text-muted font-weight-bold">กำไรสุทธิ</small>
-                        <h3 class="text-success mt-2 font-weight-bold"><%= stats.totalProfit.toLocaleString() %> <small>฿</small></h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="card shadow-sm stat-card border-danger h-100">
-                    <div class="card-body">
-                        <small class="text-muted font-weight-bold">ส่วนลดคืนลูกค้า</small>
-                        <h3 class="text-danger mt-2 font-weight-bold"><%= stats.totalDiscount.toLocaleString() %> <small>฿</small></h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="card shadow-sm stat-card border-info h-100">
-                    <div class="card-body">
-                        <small class="text-muted font-weight-bold">รับผ่าน QR Code</small>
-                        <h3 class="text-info mt-2 font-weight-bold"><%= stats.countQR.toLocaleString() %> <small>฿</small></h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card shadow-lg border-0 mb-5">
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <thead>
+        <div class="table-container mb-5 shadow-sm border">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th class="pl-4">วันที่บันทึก</th>
+                            <th>รายการสินค้า</th>
+                            <th>ชื่อลูกค้า</th>
+                            <th class="text-center">การชำระเงิน</th>
+                            <th class="text-right">ส่วนลด</th>
+                            <th class="text-right pr-4">ยอดสุทธิ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (sales.length > 0) { %>
+                            <% sales.forEach(sale => { %>
                             <tr>
-                                <th class="pl-4">วันที่ / เวลา</th>
-                                <th>สินค้า</th>
-                                <th>ลูกค้า</th>
-                                <th class="text-center">วิธีจ่ายเงิน</th>
-                                <th class="text-right">ส่วนลด</th>
-                                <th class="text-right pr-4">ยอดสุทธิ</th>
+                                <td class="pl-4">
+                                    <div class="text-dark font-weight-bold mb-0" style="font-size: 0.9rem;">
+                                        <%= moment(sale.date).format('DD MMM YYYY') %>
+                                    </div>
+                                    <small class="text-muted"><%= moment(sale.date).format('HH:mm') %> น.</small>
+                                </td>
+                                <td>
+                                    <span class="product-name"><%= sale.product ? sale.product.name : 'ไม่มีข้อมูลสินค้า' %></span>
+                                </td>
+                                <td>
+                                    <div class="member-info">
+                                        <i class="far fa-user-circle mr-1"></i> 
+                                        <%= sale.member ? sale.member.name : 'ลูกค้าทั่วไป' %>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <% if(sale.paymentMethod === 'Cash') { %>
+                                        <span class="badge-pay bg-light text-dark border"><i class="fas fa-money-bill-wave mr-1"></i> เงินสด</span>
+                                    <% } else if(sale.paymentMethod === 'QR') { %>
+                                        <span class="badge-pay" style="background: rgba(33, 147, 176, 0.1); color: #2193b0;"><i class="fas fa-qrcode mr-1"></i> QR Code</span>
+                                    <% } else { %>
+                                        <span class="badge-pay" style="background: rgba(40, 167, 69, 0.1); color: #28a745;"><i class="fas fa-university mr-1"></i> โอนเงิน</span>
+                                    <% } %>
+                                </td>
+                                <td class="text-right">
+                                    <span class="text-danger font-weight-bold" style="font-size: 0.85rem;">
+                                        <%= sale.discount > 0 ? '-' + sale.discount.toLocaleString() : '0' %>
+                                    </span>
+                                </td>
+                                <td class="text-right pr-4">
+                                    <span class="h6 font-weight-bold text-dark"><%= sale.totalPrice.toLocaleString() %> ฿</span>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            <% if (sales.length > 0) { %>
-                                <% sales.forEach(sale => { %>
-                                <tr>
-                                    <td class="pl-4 text-muted small"><%= moment(sale.date).format('DD/MM/YYYY HH:mm') %></td>
-                                    <td><span class="font-weight-bold text-dark"><%= sale.product ? sale.product.name : 'N/A' %></span></td>
-                                    <td><i class="fas fa-user-circle text-muted mr-1"></i> <%= sale.member ? sale.member.name : 'ลูกค้าทั่วไป' %></td>
-                                    <td class="text-center">
-                                        <span class="badge-pay <%= sale.paymentMethod === 'Cash' ? 'bg-light text-dark' : (sale.paymentMethod === 'QR' ? 'bg-soft-info' : 'bg-soft-success') %>">
-                                            <%= sale.paymentMethod %>
-                                        </span>
-                                    </td>
-                                    <td class="text-right text-danger small">-<%= sale.discount.toLocaleString() %></td>
-                                    <td class="text-right pr-4 font-weight-bold text-success"><%= sale.totalPrice.toLocaleString() %> ฿</td>
-                                </tr>
-                                <% }) %>
-                            <% } else { %>
-                                <tr>
-                                    <td colspan="6" class="text-center py-5">
-                                        <p class="text-muted">ไม่พบข้อมูลการขายในช่วงวันที่เลือก</p>
-                                    </td>
-                                </tr>
-                            <% } %>
-                        </tbody>
-                    </table>
-                </div>
+                            <% }) %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="6" class="text-center py-5">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/7486/7486744.png" width="80" class="mb-3 opacity-50">
+                                    <h5 class="text-muted">ไม่พบประวัติการขายในระบบ</h5>
+                                    <p class="text-muted small">ลองเปลี่ยนช่วงวันที่ที่ต้องการค้นหาอีกครั้ง</p>
+                                </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

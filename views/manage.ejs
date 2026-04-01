@@ -3,90 +3,250 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= title %></title>
+    <title><%= title || 'Inventory Management' %></title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <script src="js/jquery-3.4.1.slim.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="css/all.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
     <style>
-        .low-stock { background-color: #fff3f3; color: #dc3545; font-weight: bold; }
-        .badge-stock { padding: 5px 10px; border-radius: 20px; }
+        body { 
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .inventory-card {
+            background: white;
+            border-radius: 20px;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        /* Search Header Section */
+        .header-bar {
+            background: #1a1d20;
+            color: white;
+            padding: 40px 30px;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .search-wrapper {
+            position: relative;
+        }
+
+        .search-wrapper i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        #searchInput {
+            padding-left: 45px;
+            border-radius: 12px;
+            border: none;
+            height: 50px;
+            background: #f1f1f1;
+            font-size: 0.95rem;
+            transition: 0.3s;
+        }
+
+        #searchInput:focus {
+            background: white;
+            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.2);
+            outline: none;
+        }
+
+        /* Table Styling */
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table thead th {
+            border-top: none;
+            background: #fdfdfd;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            color: #888;
+            padding: 20px;
+            border-bottom: 2px solid #f1f1f1;
+        }
+
+        .table tbody td {
+            vertical-align: middle;
+            padding: 20px;
+            border-bottom: 1px solid #f8f8f8;
+            font-size: 0.9rem;
+        }
+
+        .product-thumb {
+            width: 55px;
+            height: 55px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 1px solid #eee;
+        }
+
+        /* Stock Status */
+        .badge-premium {
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .status-normal { background: #e7f5ee; color: #2ecc71; }
+        .status-low { background: #fff1f0; color: #ff4d4f; border: 1px solid #ffa39e; }
+
+        /* Actions */
+        .btn-action {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            border: 1px solid #eee;
+            background: white;
+        }
+
+        .btn-edit:hover { background: #eef2ff; color: #4f46e5; border-color: #4f46e5; }
+        .btn-delete:hover { background: #fff1f0; color: #ff4d4f; border-color: #ff4d4f; }
+
+        .btn-add-new {
+            background: #d4af37;
+            color: #000;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            transition: 0.3s;
+        }
+
+        .btn-add-new:hover {
+            background: #f1c40f;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+            color: #000;
+        }
     </style>
 </head>
 <body>
     <%- include('navbar.ejs') %>
     
-    <div class="container mt-4">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <div>
-                <h2 class="font-weight-bold">📦 จัดการสต็อกสินค้า</h2>
-                <p class="text-muted">ตรวจสอบจำนวนคงเหลือและแก้ไขข้อมูลสินค้า</p>
+    <div class="container mt-5 mb-5">
+        <div class="row align-items-center mb-4">
+            <div class="col-md-6">
+                <h2 class="font-weight-bold" style="letter-spacing: -1px;">Warehouse Inventory</h2>
+                <p class="text-muted small">Manage your product levels and catalog integrity.</p>
             </div>
-            <a href="/addForm" class="btn btn-success rounded-pill px-4 shadow-sm">+ เพิ่มสินค้าใหม่</a>
+            <div class="col-md-6 text-md-right">
+                <a href="/addForm" class="btn btn-add-new px-4 py-2 shadow-sm">
+                    <i class="fa-solid fa-plus-circle mr-2"></i> Add New Product
+                </a>
+            </div>
         </div>
 
-        <input type="text" id="searchInput" class="form-control mb-3 shadow-sm" placeholder="🔍 ค้นหาชื่อสินค้า, ราคา หรือรายละเอียด...">
+        <div class="inventory-card shadow-lg">
+            <div class="header-bar">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="search-wrapper">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="searchInput" class="form-control" placeholder="Search by name, SKU, or price...">
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        <div class="table-responsive shadow-sm rounded">
-            <table class="table table-hover bg-white mb-0">
-                <thead class="thead-light">
-                    <tr>
-                        <th>ชื่อสินค้า</th>
-                        <th class="text-right">ต้นทุน</th>
-                        <th class="text-right">ราคาขาย</th>
-                        <th class="text-center">คงเหลือ (Stock)</th>
-                        <th>รูปภาพ</th>
-                        <th class="text-center">จัดการ</th>
-                    </tr>
-                </thead>
-
-                <tbody id="productTable">
-                    <% Object.values(products).forEach(function(item){ %>
-                    <tr class="<%= (item.stock <= 5) ? 'low-stock' : '' %>">
-                        <td class="name font-weight-bold"><%= item.name %></td>
-                        <td class="text-right text-muted"><%= (item.cost || 0).toLocaleString() %> ฿</td>
-                        <td class="price text-right font-weight-bold text-primary"><%= (item.price || 0).toLocaleString() %> ฿</td>
-                        <td class="text-center">
-                            <span class="badge badge-stock <%= (item.stock <= 5) ? 'badge-danger' : 'badge-info' %>">
-                                <%= item.stock || 0 %> ชิ้น
-                            </span>
-                            <% if(item.stock <= 5) { %>
-                                <br><small class="text-danger">⚠️ ของใกล้หมด</small>
-                            <% } %>
-                        </td>
-                        <td>
-                            <img class="img-thumbnail" src="./images/products/<%= item.image %>" alt="<%= item.name %>"
-                                style="width: 50px; height: 50px; object-fit: cover;">
-                        </td>
-                        <td class="text-center">
-                            <div class="d-flex justify-content-center">
-                                <form action="/edit" method="POST" class="mr-1">
-                                    <input type="hidden" value="<%= item._id %>" name="id">
-                                    <button type="submit" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i> แก้ไข</button>
-                                </form>
-                                <a class="btn btn-sm btn-outline-danger" href="/delete/<%= item._id %>" onclick="return confirm('คุณต้องการลบ [<%= item.name %>] ใช่หรือไม่?')">
-                                    <i class="fas fa-trash"></i> ลบ
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    <% }) %>                    
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Product Details</th>
+                            <th class="text-right">Unit Price</th>
+                            <th class="text-center">Availability</th>
+                            <th class="text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productTable">
+                        <% Object.values(products).forEach(function(item){ %>
+                        <tr style=" <%= (item.stock <= 5) ? 'background-color: #fffafb;' : '' %>">
+                            <td>
+                                <img class="product-thumb" src="./images/products/<%= item.image %>" alt="<%= item.name %>"
+                                     onerror="this.src='https://placehold.co/100x100?text=No+Img'">
+                            </td>
+                            <td>
+                                <div class="font-weight-bold text-dark mb-1"><%= item.name %></div>
+                                <div class="text-muted small">Cost: ฿<%= (item.cost || 0).toLocaleString() %></div>
+                            </td>
+                            <td class="text-right">
+                                <span class="font-weight-bold" style="color: #4f46e5;">฿<%= (item.price || 0).toLocaleString() %></span>
+                            </td>
+                            <td class="text-center">
+                                <% if(item.stock <= 5) { %>
+                                    <span class="badge-premium status-low">
+                                        <i class="fa-solid fa-triangle-exclamation mr-1"></i> Low: <%= item.stock || 0 %>
+                                    </span>
+                                <% } else { %>
+                                    <span class="badge-premium status-normal">
+                                        In Stock: <%= item.stock || 0 %>
+                                    </span>
+                                <% } %>
+                            </td>
+                            <td class="text-right">
+                                <div class="d-flex justify-content-end">
+                                    <form action="/edit" method="POST" class="mr-2">
+                                        <input type="hidden" value="<%= item._id %>" name="id">
+                                        <button type="submit" class="btn-action btn-edit" title="Edit Item">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                    </form>
+                                    <a class="btn-action btn-delete" href="/delete/<%= item._id %>" 
+                                       onclick="return confirm('Confirm deletion of [<%= item.name %>]?')" title="Remove Item">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <% }) %>                     
+                    </tbody>
+                </table>
+            </div>
         </div>
-
-        <script>
-            document.getElementById("searchInput").addEventListener("keyup", function () {
-                let filter = this.value.toLowerCase();
-                let rows = document.querySelectorAll("#productTable tr");
-
-                rows.forEach(row => {
-                    let text = row.innerText.toLowerCase();
-                    row.style.display = text.includes(filter) ? "" : "none";
-                });
-            });
-        </script>
+        
+        <div id="noResults" class="text-center py-5 d-none">
+            <i class="fa-solid fa-box-open fa-3x text-muted mb-3"></i>
+            <h5 class="text-muted">No products match your search.</h5>
+        </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        document.getElementById("searchInput").addEventListener("keyup", function () {
+            let filter = this.value.toLowerCase();
+            let rows = document.querySelectorAll("#productTable tr");
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                let text = row.innerText.toLowerCase();
+                if(text.includes(filter)) {
+                    row.style.display = "";
+                    visibleCount++;
+                } else {
+                    row.style.display = "none";
+                }
+            });
+
+            // Toggle No Results Message
+            const noRes = document.getElementById("noResults");
+            if(visibleCount === 0) noRes.classList.remove('d-none');
+            else noRes.classList.add('d-none');
+        });
+    </script>
 </body>
 </html>

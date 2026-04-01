@@ -1,130 +1,209 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
 <style>
+    :root {
+        --accent-gold: #d4af37;
+        --text-dark: #1e293b;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+    }
+
+    /* Navbar: Glassmorphism Effect */
     .custom-navbar {
-        background-color: #1a1d20 !important; /* สีเทาเข้มแบบ Tech Look */
-        border-bottom: 2px solid #007AFF; /* เส้นขอบล่างสีฟ้า Electric Blue */
-        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.75) !important;
+        backdrop-filter: blur(15px) saturate(180%);
+        -webkit-backdrop-filter: blur(15px) saturate(180%);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        padding: 10px 0;
+        transition: all 0.4s ease;
+        z-index: 1030;
     }
 
+    /* Logo Hover Effect */
+    .navbar-brand img {
+        transition: all 0.4s ease;
+        filter: drop-shadow(0 0 0px transparent);
+    }
+    .navbar-brand:hover img {
+        transform: scale(1.05);
+        filter: drop-shadow(0 4px 8px rgba(212, 175, 55, 0.3));
+    }
+
+    /* Navigation Links */
     .nav-link {
+        color: var(--text-dark) !important;
+        font-weight: 500;
+        font-size: 0.88rem;
+        margin: 0 8px;
         position: relative;
+        padding: 8px 0 !important;
         transition: color 0.3s ease;
-        font-size: 0.95rem;
-        letter-spacing: 0.5px;
     }
 
-    /* Effect เส้นใต้ตอน Hover */
+    .nav-link:hover {
+        color: var(--accent-gold) !important;
+    }
+
+    /* Underline Animation */
     .nav-link::after {
         content: '';
         position: absolute;
         width: 0;
         height: 2px;
-        bottom: 5px;
-        left: 50%;
-        background-color: #007AFF;
-        transition: all 0.3s ease;
-        transform: translateX(-50%);
+        bottom: 0;
+        left: 0;
+        background-color: var(--accent-gold);
+        transition: width 0.3s ease;
     }
-
     .nav-link:hover::after {
-        width: 70%;
+        width: 100%;
     }
 
-    .nav-link:hover {
-        color: #007AFF !important;
-    }
-
+    /* Dropdown Luxury Style */
     .dropdown-menu {
-        background-color: #24282d;
-        border: 1px solid #3d444b;
-        border-radius: 8px;
-        box-shadow: 0 10px 15px rgba(0,0,0,0.3);
+        border: none;
+        border-radius: 18px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        padding: 12px;
+        margin-top: 15px !important;
+        background: white;
+        border: 1px solid rgba(0,0,0,0.03);
+        animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
     .dropdown-item {
-        color: #e0e0e0;
-        padding: 10px 20px;
-        transition: all 0.2s;
+        border-radius: 12px;
+        padding: 10px 18px;
+        color: #475569;
+        font-size: 0.82rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
     }
 
     .dropdown-item:hover {
-        background-color: #007AFF;
-        color: white;
+        background-color: #fdfaf0;
+        color: var(--accent-gold);
+        transform: translateX(5px);
     }
 
-    .user-badge {
-        background: rgba(0, 122, 255, 0.1);
-        border: 1px solid #007AFF;
-        border-radius: 20px;
+    /* User Profile & Badge */
+    .user-profile-box {
+        background: white;
+        border-radius: 50px;
         padding: 5px 15px;
+        display: flex;
+        align-items: center;
+        border: 1px solid rgba(0,0,0,0.06);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+
+    .role-tag {
+        background: #1e293b;
+        color: #fff;
+        font-size: 9px;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 6px;
+        letter-spacing: 0.5px;
+    }
+
+    /* Exit Button */
+    .btn-exit {
+        background: rgba(239, 68, 68, 0.08);
+        border: none;
+        color: #ef4444;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding: 8px 20px;
+        transition: all 0.3s ease;
+        text-decoration: none !important;
+    }
+
+    .btn-exit:hover {
+        background: #ef4444;
+        color: white;
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
     }
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-<nav class="navbar navbar-expand-md navbar-dark custom-navbar shadow-lg sticky-top">
-    <div class="container-fluid">
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<nav class="navbar navbar-expand-lg navbar-light custom-navbar sticky-top">
+    <div class="container">
         <a href="/" class="navbar-brand">
-            <img src="/images/home/OWEN-Photoroom (1).png" alt="OWENSHOP" style="height: 45px; filter: drop-shadow(0 0 5px rgba(0,122,255,0.3));">
+            <img src="/images/home/OWEN-Photoroom (1).png" alt="OWEN" style="height: 42px;">
         </a>
 
-        <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#mainNavbar">
-            <span class="navbar-toggler-icon"></span>
+        <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#posNavbar">
+            <i class="fa-solid fa-bars-staggered"></i>
         </button>
 
-        <div class="collapse navbar-collapse" id="mainNavbar">
-            <ul class="navbar-nav mr-auto">
-                
+        <div class="collapse navbar-collapse" id="posNavbar">
+            <ul class="navbar-nav mx-auto">
                 <% if (user) { %>
-                <li class="nav-item">
-                    <a class="nav-link text-info text-uppercase font-weight-bold px-3" href="/dashboard">
-                        <i class="fas fa-chart-line mr-1"></i> แดชบอร์ด
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">
+                            <i class="fa-solid fa-chart-line opacity-50 mr-1"></i> Overview
+                        </a>
+                    </li>
                 <% } %>
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link text-light text-uppercase font-weight-bold px-3 dropdown-toggle" href="#" data-toggle="dropdown">
-                        <i class="fas fa-store-alt mr-1"></i> จัดการร้านค้า
+                    <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="shopMenu" data-toggle="dropdown">
+                        <i class="fa-solid fa-box-open opacity-50 mr-1"></i> Inventory
                     </a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="/manage"><i class="fas fa-boxes mr-2"></i> จัดการสินค้า</a>
-                        <a class="dropdown-item" href="/addForm"><i class="fas fa-plus-circle mr-2"></i> บันทึกสินค้าใหม่</a>
-                        <div class="dropdown-divider" style="border-top: 1px solid #3d444b;"></div>
-                        <a class="dropdown-item" href="/sales/new"><i class="fas fa-cash-register mr-2"></i> ขายสินค้า (POS)</a>
-                        <a class="dropdown-item" href="/sales/report"><i class="fas fa-file-invoice-dollar mr-2"></i> รายงานการขาย</a>
+                        <a class="dropdown-item" href="/manage"><i class="fas fa-list-ul mr-2 small"></i> Catalog Details</a>
+                        <a class="dropdown-item" href="/addForm"><i class="fas fa-plus-circle mr-2 small"></i> Add New Stock</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/sales/new"><i class="fas fa-cash-register mr-2 small"></i> Terminal (POS)</a>
+                        <a class="dropdown-item" href="/sales/report"><i class="fas fa-chart-pie mr-2 small"></i> Financial Statements</a>
                     </div>
                 </li>
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link text-light text-uppercase font-weight-bold px-3 dropdown-toggle" href="#" data-toggle="dropdown">
-                        <i class="fas fa-users-cog mr-1"></i> ระบบบุคคล
+                    <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="peopleMenu" data-toggle="dropdown">
+                        <i class="fa-solid fa-user-shield opacity-50 mr-1"></i> Directory
                     </a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="/members"><i class="fas fa-user-friends mr-2"></i> รายชื่อสมาชิก</a>
-                        <a class="dropdown-item" href="/employees"><i class="fas fa-user-tie mr-2"></i> รายชื่อพนักงาน</a>
+                        <a class="dropdown-item" href="/members"><i class="fas fa-users mr-2 small"></i> Client List</a>
+                        <a class="dropdown-item" href="/employees"><i class="fas fa-user-tie mr-2 small"></i> Team Members</a>
                     </div>
                 </li>
             </ul>
 
-            <ul class="navbar-nav ml-auto align-items-center">
+            <ul class="navbar-nav align-items-center">
                 <% if (user) { %>
-                    <li class="nav-item mr-3">
-                        <div class="user-badge">
-                            <span class="text-light">
-                                <i class="fas fa-user-circle text-info"></i> <%= user.name %> 
-                                <span class="badge badge-info ml-1" style="font-size: 9px;"><%= user.role %></span>
+                    <li class="nav-item">
+                        <div class="user-profile-box mr-3">
+                            <span style="font-size: 0.85rem; color: #1e293b;">
+                                <i class="fa-solid fa-circle-user text-muted mr-1"></i>
+                                <strong><%= user.name %></strong>
+                                <span class="role-tag ml-1"><%= user.role %></span>
                             </span>
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-outline-danger btn-sm rounded-pill px-3" href="/logout">
-                            <i class="fas fa-sign-out-alt"></i> ออกจากระบบ
+                        <a class="btn-exit" href="/logout">
+                            <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i> Exit
                         </a>
                     </li>
                 <% } else { %>
                     <li class="nav-item">
-                        <a class="nav-link text-light font-weight-bold" href="/login">เข้าสู่ระบบ</a>
+                        <a class="nav-link" href="/login">Log In</a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-info btn-sm rounded-pill px-4 ml-2" href="/register">สมัครสมาชิก</a>
+                        <a class="btn btn-dark btn-sm rounded-pill px-4 ml-2" href="/register" style="font-weight: 600; letter-spacing: 0.5px;">Join Us</a>
                     </li>
                 <% } %>
             </ul>

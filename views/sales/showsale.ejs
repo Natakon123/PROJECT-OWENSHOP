@@ -3,42 +3,246 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Sales List</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales List | OWENSHOP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #007AFF;
+            --bg: #f8fafc;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --white: #ffffff;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Header Section */
+        .header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin: 0;
+            color: var(--text-dark);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-add {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.25);
+        }
+
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 122, 255, 0.35);
+        }
+
+        .btn-home {
+            background: white;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+        }
+
+        .btn-home:hover {
+            background: #f1f5f9;
+            color: var(--text-dark);
+        }
+
+        /* Table Card Design */
+        .table-card {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            background: #fcfdfe;
+            padding: 16px 24px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.95rem;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: #f8fafc;
+        }
+
+        /* Styling Specific Columns */
+        .product-name {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .member-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-muted);
+        }
+
+        .qty-circle {
+            background: #eff6ff;
+            color: var(--primary);
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .price-tag {
+            font-weight: 700;
+            color: #10b981; /* สีเขียวสำหรับราคา */
+        }
+
+        .date-text {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-flex {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            .table-card {
+                overflow-x: auto;
+            }
+            th, td {
+                padding: 12px 16px;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <div class="container">
-        <h1>Sales List</h1>
-        <a href="/sales/new" class="btn">➕ Add New Sale</a>
-        <a href="/" class="btn-cancel">กลับหน้าแรก</a>
-        <table>
-            <tr>
-                <th>Product</th>
-                <th>Member</th>
-                <th>Quantity</th>
-                <th>Total Price</th>
-                <th>Date</th>
-            </tr>
-            <% sales.forEach(sale=> { %>
-                <tr>
-                    <td>
-                        <%= sale.product.name %>
-                    </td>
-                    <td>
-                        <%= sale.member.name %>
-                    </td>
-                    <td>
-                        <%= sale.quantity %>
-                    </td>
-                    <td>$<%= sale.totalPrice.toFixed(2) %>
-                    </td>
-                    <td>
-                        <%= sale.date.toDateString() %>
-                    </td>
-                </tr>
-                <% }) %>
-        </table>
+        <div class="header-flex">
+            <div>
+                <h1>Sales History</h1>
+                <p style="color: var(--text-muted); margin-top: 5px; font-size: 0.9rem;">รายการประวัติการขายทั้งหมดในระบบ</p>
+            </div>
+            <div class="btn-group">
+                <a href="/" class="btn btn-home">
+                    <i class="fas fa-home"></i> กลับหน้าแรก
+                </a>
+                <a href="/sales/new" class="btn btn-add">
+                    <i class="fas fa-plus"></i> เพิ่มรายการขาย
+                </a>
+            </div>
+        </div>
+
+        <div class="table-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Member</th>
+                        <th>Qty</th>
+                        <th>Total Amount</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (sales.length > 0) { %>
+                        <% sales.forEach(sale => { %>
+                            <tr>
+                                <td>
+                                    <span class="product-name"><%= sale.product.name %></span>
+                                </td>
+                                <td>
+                                    <div class="member-badge">
+                                        <i class="far fa-user-circle"></i>
+                                        <%= sale.member.name %>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="qty-circle"><%= sale.quantity %></div>
+                                </td>
+                                <td>
+                                    <span class="price-tag">฿<%= sale.totalPrice.toLocaleString(undefined, {minimumFractionDigits: 2}) %></span>
+                                </td>
+                                <td>
+                                    <span class="date-text">
+                                        <i class="far fa-calendar-alt" style="margin-right: 4px;"></i>
+                                        <%= sale.date.toLocaleDateString('th-TH', { day: '2-digit', month: 'short', year: 'numeric' }) %>
+                                    </span>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 50px; color: var(--text-muted);">
+                                <i class="fas fa-inbox" style="font-size: 2rem; display: block; margin-bottom: 10px;"></i>
+                                ยังไม่มีข้อมูลการขายในขณะนี้
+                            </td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
     </div>
 </body>
 

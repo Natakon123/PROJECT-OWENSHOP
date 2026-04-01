@@ -5,43 +5,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register | OWENSHOP</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #007AFF;
+            --primary-hover: #0056b3;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --error-color: #ef4444;
+        }
+
         body {
-            background-color: #f4f7f6;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at 50% 0%, #e2e8f0 0%, var(--bg-color) 50%);
+            font-family: 'Plus Jakarta Sans', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh; /* ใช้ min-height เพราะหน้าสมัครยาวกว่า Login */
+            min-height: 100vh;
             margin: 0;
-            padding: 20px 0;
+            padding: 40px 20px;
         }
 
         .container {
-            background: #ffffff;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            background: var(--card-bg);
+            padding: 50px 40px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
             width: 100%;
-            max-width: 450px;
+            max-width: 480px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-section img {
+            height: 60px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-section img:hover {
+            transform: scale(1.05);
         }
 
         h2 {
-            color: #1a1d20;
+            color: var(--text-main);
             text-align: center;
-            margin-bottom: 25px;
-            font-weight: 700;
+            margin-bottom: 10px;
+            font-weight: 800;
+            font-size: 1.8rem;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 35px;
         }
 
         .error-bar {
-            background-color: #fdeaea;
-            color: #e74c3c;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 14px;
-            margin-bottom: 20px;
-            border-left: 5px solid #e74c3c;
+            background-color: #fef2f2;
+            color: var(--error-color);
+            padding: 14px 18px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--error-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
         }
 
         form {
@@ -49,115 +95,165 @@
             flex-direction: column;
         }
 
+        .form-group {
+            margin-bottom: 20px;
+        }
+
         label {
-            font-size: 14px;
-            font-weight: 600;
-            color: #555;
-            margin-bottom: 5px;
-            margin-top: 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         input {
             width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            padding: 14px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
             box-sizing: border-box;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+            background: #fdfdfd;
+        }
+
+        input::placeholder {
+            color: #cbd5e1;
         }
 
         input:focus {
-            border-color: #007AFF;
+            border-color: var(--primary-color);
             outline: none;
-            box-shadow: 0 0 8px rgba(0, 122, 255, 0.2);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
+        }
+
+        .password-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
         }
 
         .btn-group {
-            margin-top: 30px;
+            margin-top: 15px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
         button[type="submit"] {
-            background-color: #007AFF; /* สีฟ้า Electric Blue ตามธีม */
+            background: linear-gradient(135deg, var(--primary-color) 0%, #0056D2 100%);
             color: white;
-            padding: 14px;
+            padding: 16px;
             border: none;
-            border-radius: 8px;
+            border-radius: 14px;
             cursor: pointer;
-            font-weight: bold;
-            font-size: 16px;
-            transition: 0.3s;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0, 122, 255, 0.2);
         }
 
         button[type="submit"]:hover {
-            background-color: #0056b3;
             transform: translateY(-2px);
+            box-shadow: 0 15px 25px rgba(0, 122, 255, 0.3);
+            filter: brightness(1.1);
+        }
+
+        button[type="submit"]:active {
+            transform: translateY(0);
         }
 
         .btn-cancel {
             text-align: center;
-            padding: 12px;
-            color: #888;
+            padding: 10px;
+            color: var(--text-muted);
             text-decoration: none;
-            font-size: 14px;
-            transition: 0.3s;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: 0.2s;
         }
 
         .btn-cancel:hover {
-            color: #333;
+            color: var(--text-main);
         }
 
         .footer-text {
             text-align: center;
-            margin-top: 20px;
-            font-size: 14px;
-            color: #666;
+            margin-top: 30px;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            padding-top: 20px;
+            border-top: 1px solid #f1f5f9;
         }
 
         .footer-text a {
-            color: #007AFF;
+            color: var(--primary-color);
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 700;
         }
 
         .footer-text a:hover {
             text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+                border-radius: 0;
+            }
+            body {
+                padding: 0;
+                background: #fff;
+            }
+            .password-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <div style="text-align: center;">
-            <img src="/images/home/OWEN-Photoroom (1).png" alt="OWENSHOP" style="height: 50px; margin-bottom: 15px;">
+        <div class="logo-section">
+            <img src="/images/home/OWEN-Photoroom (1).png" alt="OWENSHOP">
         </div>
 
-        <h2>สมัครสมาชิกใหม่</h2>
+        <h2>สร้างบัญชีใหม่</h2>
+        <p class="subtitle">เข้าร่วมกับเราเพื่อสัมผัสประสบการณ์ที่ดีที่สุด</p>
         
         <% if (typeof error !== "undefined" ) { %>
             <div class="error-bar">
-                <i class="fas fa-exclamation-circle"></i> <%= error %>
+                <i class="fas fa-circle-exclamation"></i> 
+                <span><%= error %></span>
             </div>
         <% } %>
 
         <form action="/register" method="POST">
-            <label>ชื่อ-นามสกุล</label>
-            <input type="text" name="name" placeholder="กรอกชื่อของคุณ" required value="<%= old.name || '' %>">
+            <div class="form-group">
+                <label><i class="far fa-user mr-2"></i> ชื่อ-นามสกุล</label>
+                <input type="text" name="name" placeholder="ชื่อ นามสกุล" required value="<%= old && old.name ? old.name : '' %>">
+            </div>
 
-            <label>อีเมล</label>
-            <input type="email" name="email" placeholder="example@mail.com" required value="<%= old.email || '' %>">
+            <div class="form-group">
+                <label><i class="far fa-envelope mr-2"></i> อีเมล</label>
+                <input type="email" name="email" placeholder="example@mail.com" required value="<%= old && old.email ? old.email : '' %>">
+            </div>
 
-            <label>เบอร์โทรศัพท์</label>
-            <input type="text" name="phone" placeholder="08x-xxx-xxxx" required value="<%= old.phone || '' %>">
+            <div class="form-group">
+                <label><i class="fas fa-mobile-screen-button mr-2"></i> เบอร์โทรศัพท์</label>
+                <input type="text" name="phone" placeholder="08x-xxx-xxxx" required value="<%= old && old.phone ? old.phone : '' %>">
+            </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                <div>
-                    <label>รหัสผ่าน</label>
+            <div class="password-grid">
+                <div class="form-group">
+                    <label><i class="fas fa-lock mr-2"></i> รหัสผ่าน</label>
                     <input type="password" name="password" placeholder="••••••••" required>
                 </div>
-                <div>
+                <div class="form-group">
                     <label>ยืนยันรหัสผ่าน</label>
                     <input type="password" name="confirmPassword" placeholder="••••••••" required>
                 </div>
@@ -165,14 +261,14 @@
 
             <div class="btn-group">
                 <button type="submit" onclick="return confirm('ยืนยันข้อมูลการสมัครสมาชิกใช่หรือไม่?')">
-                    ลงทะเบียนใช้งาน
+                    ลงทะเบียนเข้าใช้งาน
                 </button>
-                <a href="/" class="btn-cancel">ยกเลิกและกลับหน้าแรก</a>
+                <a href="/" class="btn-cancel">กลับหน้าหลัก</a>
             </div>
         </form>
 
         <div class="footer-text">
-            มีบัญชี OWENSHOP อยู่แล้ว? <a href="/login">เข้าสู่ระบบ</a>
+            มีบัญชีอยู่แล้ว? <a href="/login">เข้าสู่ระบบเลย</a>
         </div>
     </div>
 </body>

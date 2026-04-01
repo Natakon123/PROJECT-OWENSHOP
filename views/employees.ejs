@@ -3,30 +3,129 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= title %></title>
+    <title><%= title || 'Associate Directory' %></title>
 
     <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <script src="js/jquery-3.4.1.slim.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
-        .table thead {
-            background-color: #1a1d20;
-            color: white;
+        body {
+            background-color: #fafafa;
+            font-family: 'Inter', sans-serif;
+            color: #333;
         }
-        .badge {
-            padding: 8px 12px;
-            border-radius: 6px;
+
+        .page-header {
+            padding: 40px 0;
+            background: white;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        .header-title {
+            font-weight: 600;
+            letter-spacing: -1px;
+            color: #1a1a1a;
+        }
+
+        /* Table Styling */
+        .directory-card {
+            background: white;
+            border: none;
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.03);
+            overflow: hidden;
+        }
+
+        .table-premium thead th {
+            background: #fdfdfd;
+            border: none;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 1.5px;
+            color: #aaa;
+            padding: 25px 20px;
+        }
+
+        .table-premium tbody tr {
+            transition: all 0.2s;
+        }
+
+        .table-premium tbody tr:hover {
+            background-color: #fcfcfc;
+        }
+
+        .table-premium td {
+            padding: 20px;
+            vertical-align: middle;
+            border-top: 1px solid #f8f8f8;
+        }
+
+        /* Avatar Placeholder */
+        .avatar-initial {
+            width: 40px;
+            height: 40px;
+            background: #1a1a1a;
+            color: #d4af37;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 15px;
+        }
+
+        /* Badge Styling */
+        .badge-custom {
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 10px;
             font-weight: 600;
             text-transform: uppercase;
-            font-size: 11px;
+            letter-spacing: 0.5px;
         }
-        /* สีทองสำหรับ Manager */
-        .bg-warning-custom {
-            background-color: #ffc107;
-            color: #000;
+
+        .badge-owner { background: #1a1a1a; color: #d4af37; border: 1px solid #d4af37; }
+        .badge-manager { background: #fffbeb; color: #b45309; }
+        .badge-staff { background: #f3f4f6; color: #374151; }
+
+        /* Action Buttons */
+        .btn-add-associate {
+            background: #1a1a1a;
+            color: white;
+            border-radius: 12px;
+            padding: 10px 24px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn-add-associate:hover {
+            background: #d4af37;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-delete-minimal {
+            color: #eca1a1;
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: 0.2s;
+            padding: 8px 15px;
+            border-radius: 8px;
+        }
+
+        .btn-delete-minimal:hover {
+            color: #ff4d4d;
+            background: #fff5f5;
+            text-decoration: none;
+        }
+
+        .empty-state {
+            padding: 80px 0;
+            color: #ccc;
         }
     </style>
 </head>
@@ -34,64 +133,91 @@
 <body>
     <%- include('navbar.ejs') %>
 
-<div class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2><i class="fas fa-users-cog mr-2"></i> จัดการพนักงาน</h2>
-        <a href="/employees/add" class="btn btn-primary shadow-sm">
-            <i class="fas fa-user-plus mr-1"></i> เพิ่มพนักงานใหม่
-        </a>
-    </div>
+    <header class="page-header">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="header-title mb-1">Team Directory</h2>
+                <p class="text-muted small mb-0">Manage roles and access permissions for your associates.</p>
+            </div>
+            <a href="/employees/add" class="btn btn-add-associate">
+                <i class="fa-solid fa-plus mr-2" style="font-size: 0.8rem;"></i> Add Associate
+            </a>
+        </div>
+    </header>
 
-    <div class="card shadow-sm border-0">
-        <div class="table-responsive">
-            <table class="table table-hover mb-0">
-                <thead class="thead-dark">
-                    <tr>
-                        <th class="px-4">ชื่อพนักงาน</th>
-                        <th>อีเมล (Email)</th>
-                        <th class="text-center">ตำแหน่ง (Role)</th>
-                        <th class="text-center">การจัดการ</th>
-                    </tr>
-                </thead>
+    <div class="container">
+        <div class="directory-card shadow-sm">
+            <div class="table-responsive">
+                <table class="table table-premium mb-0">
+                    <thead>
+                        <tr>
+                            <th class="px-4">Associate</th>
+                            <th>Contact Email</th>
+                            <th class="text-center">Privilege Level</th>
+                            <th class="text-right px-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% employees.forEach(function(emp){ %>
+                        <tr>
+                            <td class="px-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-initial">
+                                        <%= emp.name.charAt(0).toUpperCase() %>
+                                    </div>
+                                    <div>
+                                        <div class="font-weight-bold text-dark"><%= emp.name %></div>
+                                        <div class="text-muted" style="font-size: 0.75rem;">ID: #<%= emp._id.toString().slice(-5) %></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-muted small">
+                                <%= emp.email %>
+                            </td>
+                            <td class="text-center">
+                                <% if(emp.role === 'owner'){ %>
+                                    <span class="badge-custom badge-owner">
+                                        <i class="fa-solid fa-crown mr-1"></i> Owner
+                                    </span>
+                                <% } else if(emp.role === 'manager'){ %>
+                                    <span class="badge-custom badge-manager">
+                                        <i class="fa-solid fa-user-tie mr-1"></i> Manager
+                                    </span>
+                                <% } else { %>
+                                    <span class="badge-custom badge-staff">
+                                        <i class="fa-solid fa-user mr-1"></i> Staff
+                                    </span>
+                                <% } %>
+                            </td>
+                            <td class="text-right px-4">
+                                <a href="/employees/delete/<%= emp._id %>" 
+                                   class="btn-delete-minimal"
+                                   onclick="return confirm('Are you sure you want to revoke access for this associate?')">
+                                    <i class="fa-solid fa-user-minus mr-1"></i> Terminate
+                                </a>
+                            </td>
+                        </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
 
-                <tbody>
-                    <% employees.forEach(function(emp){ %>
-                    <tr>
-                        <td class="align-middle px-4 font-weight-bold">
-                            <%= emp.name %>
-                        </td>
-                        <td class="align-middle text-muted">
-                            <%= emp.email %>
-                        </td>
-                        <td class="align-middle text-center">
-                            <% if(emp.role === 'owner'){ %>
-                                <span class="badge bg-danger text-white"><i class="fas fa-crown mr-1"></i> Owner</span>
-                            <% } else if(emp.role === 'manager'){ %>
-                                <span class="badge bg-warning-custom"><i class="fas fa-user-tie mr-1"></i> Manager</span>
-                            <% } else { %>
-                                <span class="badge bg-info text-white"><i class="fas fa-user mr-1"></i> Staff</span>
-                            <% } %>
-                        </td>
-
-                        <td class="align-middle text-center">
-                            <a href="/employees/delete/<%= emp._id %>" 
-                               class="btn btn-outline-danger btn-sm"
-                               onclick="return confirm('คุณแน่ใจหรือไม่ว่าต้องการลบพนักงานท่านนี้?')">
-                                <i class="fas fa-trash-alt"></i> ลบพนักงาน
-                            </a>
-                        </td>
-                    </tr>
-                    <% }) %>
-                </tbody>
-            </table>
+            <% if(employees.length === 0) { %>
+                <div class="text-center empty-state">
+                    <i class="fa-solid fa-users-slash fa-3x mb-3"></i>
+                    <p>No associate records found in the system.</p>
+                </div>
+            <% } %>
+        </div>
+        
+        <div class="mt-4 text-center">
+            <p class="text-muted" style="font-size: 0.7rem; letter-spacing: 1px;">
+                © 2026 OWENSHOP ENTERPRISE SYSTEM
+            </p>
         </div>
     </div>
-    
-    <% if(employees.length === 0) { %>
-        <div class="text-center mt-5">
-            <p class="text-muted">ยังไม่มีข้อมูลพนักงานในระบบ</p>
-        </div>
-    <% } %>
-</div>
+
+    <script src="js/jquery-3.4.1.slim.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
 </body>
 </html>

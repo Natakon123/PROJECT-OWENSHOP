@@ -4,163 +4,190 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= title %></title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title><%= title || 'Premium Collection' %></title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/all.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 
     <style>
         :root {
-            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-            --glass: rgba(255, 255, 255, 0.8);
+            --primary-accent: #6366f1;
+            --secondary-accent: #a855f7;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --dark-surface: #111827;
         }
 
         body { 
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6; 
+            background-color: #f8fafc; 
             color: #1f2937;
         }
 
-        /* Header Styling */
+        /* Header Branding */
         .hero-section {
-            padding: 60px 0 40px;
+            padding: 80px 0 60px;
             text-align: center;
+        }
+
+        .hero-badge {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary-accent);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: inline-block;
+            margin-bottom: 20px;
         }
 
         .hero-title {
             font-weight: 800;
-            font-size: 3rem;
-            background: var(--primary-gradient);
+            font-size: 3.5rem;
+            letter-spacing: -2px;
+            background: linear-gradient(135deg, #1e293b 0%, #4f46e5 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
-        /* Modern Glass Search Bar */
-        .search-container {
-            background: var(--glass);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 30px;
-            border-radius: 24px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
-            margin-bottom: 50px;
+        /* Smart Search Terminal */
+        .search-terminal {
+            background: white;
+            border-radius: 30px;
+            padding: 10px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0,0,0,0.03);
+            margin-bottom: 70px;
         }
 
-        .form-control-custom {
-            border: 2px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 12px 20px;
-            transition: all 0.3s;
+        .inner-search {
+            padding: 20px 30px;
         }
 
-        .form-control-custom:focus {
-            border-color: #6366f1;
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        .form-control-minimal {
+            border: none;
+            background: transparent;
+            font-size: 1.1rem;
+            font-weight: 500;
+            padding: 10px 0;
+            border-bottom: 2px solid #f1f5f9;
+            border-radius: 0;
+            transition: 0.3s;
+        }
+
+        .form-control-minimal:focus {
+            box-shadow: none;
+            border-color: var(--primary-accent);
             outline: none;
         }
 
-        .btn-search-premium {
-            background: var(--primary-gradient);
+        .btn-launch {
+            background: var(--dark-surface);
             color: white;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .btn-search-premium:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
-            color: white;
-        }
-
-        /* Product Card Styling */
-        .product-card {
-            background: white;
-            border: none;
             border-radius: 20px;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            overflow: hidden;
-            height: 100%;
+            height: 60px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: 0.4s;
         }
 
-        .product-card:hover {
-            transform: translateY(-12px);
-            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.08);
+        .btn-launch:hover {
+            background: var(--primary-accent);
+            transform: scale(1.02);
+            color: white;
         }
 
-        .img-wrapper {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card-img-top {
-            height: 250px;
-            object-fit: cover;
-            transition: transform 0.5s;
-        }
-
-        .product-card:hover .card-img-top {
-            transform: scale(1.1);
-        }
-
-        .price-tag {
-            position: absolute;
-            top: 15px;
-            right: 15px;
+        /* Product Card: The "Object" Style */
+        .product-object {
             background: white;
-            padding: 6px 15px;
-            border-radius: 50px;
-            font-weight: 700;
-            color: #4f46e5;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-radius: 32px;
+            border: 1px solid #f1f5f9;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            height: 100%;
+            position: relative;
         }
 
-        .card-body {
-            padding: 25px;
-            text-align: left;
+        .product-object:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.1);
+            border-color: transparent;
         }
 
-        .product-name {
-            font-weight: 700;
+        .img-container {
+            padding: 15px;
+            position: relative;
+        }
+
+        .img-container img {
+            border-radius: 24px;
+            height: 280px;
+            object-fit: cover;
+            width: 100%;
+        }
+
+        .float-price {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 18px;
+            font-weight: 800;
             font-size: 1.2rem;
-            color: #111827;
-            margin-bottom: 8px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            color: var(--dark-surface);
+        }
+
+        .object-body {
+            padding: 0 30px 30px;
+        }
+
+        .obj-category {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .obj-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--dark-surface);
+            margin-bottom: 12px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .obj-desc {
+            color: #64748b;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .btn-view-obj {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            background: #f8fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark-surface);
+            transition: 0.3s;
             text-decoration: none;
         }
 
-        .product-name:hover { color: #6366f1; }
-
-        .description-text {
-            color: #6b7280;
-            font-size: 0.9rem;
-            line-height: 1.5;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            margin-bottom: 20px;
-        }
-
-        .btn-details {
-            border: 2px solid #e5e7eb;
-            color: #374151;
-            font-weight: 600;
-            border-radius: 12px;
-            padding: 10px;
-            width: 100%;
-            transition: all 0.3s;
-        }
-
-        .btn-details:hover {
-            background: #111827;
+        .product-object:hover .btn-view-obj {
+            background: var(--dark-surface);
             color: white;
-            border-color: #111827;
         }
 
-        /* Navbar Fix */
-        .navbar { margin-bottom: 0 !important; }
     </style>
 </head>
 
@@ -168,27 +195,28 @@
     <%- include('navbar.ejs') %>
 
     <div class="container">
-        <header class="hero-section animate__animated animate__fadeIn">
+        <header class="hero-section">
+            <span class="hero-badge">Latest Technology</span>
             <h1 class="hero-title">ITMI Shop Collections</h1>
-            <p class="text-muted lead">ค้นพบนวัตกรรมและสินค้าไอทีที่คุณตามหาในราคาที่ดีที่สุด</p>
+            <p class="text-muted lead mx-auto" style="max-width: 600px;">สัมผัสประสบการณ์ช้อปปิ้งสินค้าไอทีที่คัดสรรมาเพื่อไลฟ์สไตล์ยุคใหม่ของคุณ</p>
         </header>
 
         <div class="row justify-content-center">
-            <div class="col-lg-9">
-                <div class="search-container shadow-sm">
-                    <form action="/find" method="GET">
-                        <div class="row g-3 align-items-center">
+            <div class="col-lg-10">
+                <div class="search-terminal">
+                    <form action="/find" method="GET" class="inner-search">
+                        <div class="row g-4 align-items-center">
                             <div class="col-md-4">
-                                <label class="small font-weight-bold ml-1 text-secondary">ราคาเริ่มต้น</label>
-                                <input type="number" class="form-control form-control-custom" name="minPrice" placeholder="฿ ต่ำสุด">
+                                <label class="small text-muted font-weight-bold mb-2">FLOOR PRICE</label>
+                                <input type="number" class="form-control form-control-minimal" name="minPrice" placeholder="฿ 0">
                             </div>
                             <div class="col-md-4">
-                                <label class="small font-weight-bold ml-1 text-secondary">ราคาสูงสุด</label>
-                                <input type="number" class="form-control form-control-custom" name="maxPrice" placeholder="฿ สูงสุด">
+                                <label class="small text-muted font-weight-bold mb-2">CEILING PRICE</label>
+                                <input type="number" class="form-control form-control-minimal" name="maxPrice" placeholder="฿ 50,000+">
                             </div>
-                            <div class="col-md-4 mt-md-4">
-                                <button type="submit" class="btn btn-search-premium btn-lg w-100 mt-2">
-                                    <i class="fas fa-search mr-2"></i> ค้นหาสินค้า
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-launch w-100 shadow-sm">
+                                    <i class="fa-solid fa-rocket mr-2"></i> SEARCH CATALOG
                                 </button>
                             </div>
                         </div>
@@ -197,28 +225,35 @@
             </div>
         </div>
 
-        <div class="row mt-2">
+        <div class="row">
             <% Object.values(products).forEach(function(item){ %>
                 <div class="col-xl-4 col-md-6 mb-5">
-                    <div class="card product-card">
-                        <div class="img-wrapper">
+                    <div class="product-object">
+                        <div class="img-container">
                             <a href="/<%= item._id %>">
-                                <img class="card-img-top" src="./images/products/<%= item.image %>" alt="<%= item.name %>">
+                                <img src="./images/products/<%= item.image %>" alt="<%= item.name %>">
                             </a>
-                            <div class="price-tag">
-                                <%= (item.price || 0).toLocaleString() %> ฿
+                            <div class="float-price">
+                                <span style="font-size: 0.8rem; font-weight: 400; color: #94a3b8;">฿</span>
+                                <%= (item.price || 0).toLocaleString() %>
                             </div>
                         </div>
-                        <div class="card-body d-flex flex-column">
-                            <a href="/<%= item._id %>" class="product-name">
+                        
+                        <div class="object-body">
+                            <span class="obj-category">Official Hardware</span>
+                            <a href="/<%= item._id %>" class="obj-title">
                                 <%= item.name %>
                             </a>
-                            <p class="description-text">
+                            <p class="obj-desc">
                                 <%= item.description %>
                             </p>
-                            <div class="mt-auto">
-                                <a href="/<%= item._id %>" class="btn btn-details">
-                                    View Details
+                            
+                            <div class="d-flex justify-content-between align-items-center mt-4">
+                                <span class="small font-weight-bold text-success">
+                                    <i class="fa-solid fa-circle-check mr-1"></i> In Stock
+                                </span>
+                                <a href="/<%= item._id %>" class="btn-view-obj">
+                                    <i class="fa-solid fa-arrow-right"></i>
                                 </a>
                             </div>
                         </div>
@@ -228,7 +263,7 @@
         </div>
     </div>
 
-    <script src="js/jquery-3.4.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
 </body>
 
